@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 
+"""
+ Main class that manages the reading of info and storage.
+ - reading player statistics per matchday (web)
+ - reading the fixtures of a matchday (web)
+ - reading team performance (web)
+ - reading votes FW (db)
+ TODO: fixtures and match stats very limited
+"""
+
 from utils.myprint import myprint
 from conf import  _WEB_STATS_PLAYERS_, _DATA_FOLDER_, _WEB_STATS_MATCHES_, _WEB_STATS_PERF_
 from conf import _SQL_CONNECTION_
@@ -8,12 +17,14 @@ import figc_helpers as figch
 import fbref_helpers as fbrefh
 
 class data_preparator ():
-    
+
+    # constructor
     def __init__ (self, matchday = 1, debug = False):
         self.matchday = matchday
         self.debug = debug
         self.init()
 
+    # init and logger
     def init (self):
         self.logger = myprint ("data_preptor", self.debug)
         self.logger.print_info ("initializing..")
@@ -21,6 +32,7 @@ class data_preparator ():
         self.logger.print_info (msg = " - web-page fixturess = %s" % _WEB_STATS_MATCHES_)
         self.logger.print_info (msg = " - web-page peform    = %s" % _WEB_STATS_PERF_)
 
+    # read and save the player stats from web
     def read_player_stats (self):
         web_content = webh.read_webpage (_WEB_STATS_PLAYERS_)
         dict_teams = figch.get_dict_of_teams (web_content)
@@ -33,7 +45,9 @@ class data_preparator ():
            
         self.logger.print_info ("Storing output to JSON ..")
         self.save (perf, 'players')
-            
+
+
+    # read and save the fixtures from web
     # TODO: find a better place to get match info
     def read_fixtures (self):
         web_content = webh.read_webpage (_WEB_STATS_MATCHES_)
@@ -42,9 +56,9 @@ class data_preparator ():
             for fxt in fixtures: self.logger.print_debug ("   %s %s %s-%s" % (fxt['home'], fxt['away'], fxt['goal_home'], fxt['goal_away']))
         self.logger.print_info ("Storing output to JSON ..")
         self.save (perf, 'fixtures')
+
         
-
-
+    # read and save the team performance from web
     def read_perf (self):
         web_content = webh.read_webpage (_WEB_STATS_PERF_)
         perf = fbrefh.decode_perf (web_content)
@@ -54,8 +68,7 @@ class data_preparator ():
         self.save (perf, 'performance')
         
         
-
-
+    # read and save the vote from db
     def read_votes (self):
         import sql_helpers
         votes = sql_helpers.get_votes_per_matchday ( connection = _SQL_CONNECTION_,
@@ -69,7 +82,7 @@ class data_preparator ():
             self.logger.print_debug ("   ..." )
         self.save (votes, 'votes')
         
-
+    # save the dictionary to JSON
     def save (self, dictionary, label):
         from utils.management import check_folder_and_create
         check_folder_and_create (_DATA_FOLDER_)

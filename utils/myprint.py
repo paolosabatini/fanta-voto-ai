@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+
+"""
+ Class for printing/logging
+"""
 class myprint ():
     level = 0
     label = ""

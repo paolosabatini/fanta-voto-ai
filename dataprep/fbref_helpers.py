@@ -1,8 +1,17 @@
 #!/usr/bin/env python
 
+"""
+ FBREF helpers function for interpreting the content
+ - decoding the fixtures from the dedicated page
+ - decoding the performance from the standard stats page
+"""
+
 from web_helpers import *
 from utils.converter import *
- 
+
+"""
+ Get the fixtures from the dedicated table given the matchweek
+"""
 def decode_fixtures (web_content, matchweek):
 
     table_content = get_div (web_content, div_type = 'table', div_id = 'sched_2022-2023_208_1')
@@ -14,7 +23,10 @@ def decode_fixtures (web_content, matchweek):
         matches.append (get_match_from_fixture_row(row))
 
     return matches
-        
+
+"""
+ Given the table row for fixtures, it provides the fixture
+"""
 def get_match_from_fixture_row (row):
     cols = row.split ("</td>")
     home = scrape_info ( text = [col for col in cols if 'home_team' in col][0],
@@ -30,14 +42,21 @@ def get_match_from_fixture_row (row):
     
     return { 'home' : teamname2label(home), 'away' : teamname2label(away), 'goal_home' : score.split('-')[0], 'goal_away' : score.split('-')[-1] }
 
-    
+"""
+ Helper function for deconding the fixture rows
+"""
 def get_fixture_rows (content, matchweek):
     return [x for x in content.split ('</tr>') if '"gameweek" >%s<' % matchweek in x]
 
-
+"""
+ Helper function for deconding the team rows
+"""
 def get_team_rows (content):
     return [x for x in content.split ('</tr>') if "team" in x]
 
+"""
+ Given the table content, it gives the performance stats for the team
+"""
 def decode_perf (web_content):
     table_content = get_div (web_content, div_type = 'table',
                              div_id = 'stats_squads_standard_for',
@@ -50,6 +69,9 @@ def decode_perf (web_content):
 
     return perf
 
+"""
+ Decoding the team performance from the row content
+"""
 def get_perf (row):
     cols = row.split ("</td>")
 

@@ -53,6 +53,17 @@ def main ():
     else:
         dp.read_votes()
 
+    mp.print_info ("Succesfully finished!")
+
+"""
+ Configuration parser:
+ - d/debug : enable debug printout
+ - m/matchday : matchday to download the data
+ - noplayers : skip reading stats per matchday for players
+ - nofixtures : skip reading fixtures per matchday
+ - noperf : skip reading performances of teams
+ - novote : skip reading votes from the database
+"""
         
 def opt_parser ():
     from optparse import OptionParser
@@ -66,5 +77,9 @@ def opt_parser ():
     (config, sys.argv[1:]) = parser.parse_args(sys.argv[1:])
     return config
 
+
+"""
+ Main function is called
+"""
 if __name__ == "__main__":
     main ()

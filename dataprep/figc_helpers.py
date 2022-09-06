@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 # coding=utf8   
 
+"""
+ FIGC interpreter helping function
+ - get the list of teams from the main page
+ - get the list and stats of player from team page
+"""
 
+# get the list of team from the home page of clubs
 def get_dict_of_teams (content, base_url=''):
     dict_of_teams = {}
     main_content = content.split ("<!-- MAIN-->")[1]
@@ -15,7 +21,7 @@ def get_dict_of_teams (content, base_url=''):
         
     return dict_of_teams
     
-
+# get the stats of each player given the page content of a club
 def decode_these_players (content, team_name):
     from utils.converter import teamname2label, name2noutf8
     from web_helpers import scrape_info

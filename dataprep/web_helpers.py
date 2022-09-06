@@ -1,15 +1,29 @@
 #!/usr/bin/env python
 
+"""
+ Helper functions for the web decoding
+"""
+
 import requests
 
+"""
+ Get the HTML content of the webpage
+"""
 def read_webpage (url):
     req = requests.get(url, 'html.parser')
     return req.text
 
+"""
+ In a table: use this to get a cell content
+"""
 def scrape_info ( text, key, left, right):
     line = [(x.strip()) for x in text.splitlines() if key in x][0]
     return line.split (left)[-1].split(right)[0]
 
+"""
+ Get the div content (especially when it is a table)
+ TODO: it does not handle well "div" and nested structures
+"""
 def get_div ( web_content, div_id = '', div_type = '', extra_label = '' ):
     div_content = str()        
     found = False
