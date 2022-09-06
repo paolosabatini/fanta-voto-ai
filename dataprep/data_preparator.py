@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 from utils.myprint import myprint
-from conf import  _WEB_STATS_PLAYERS_, _DATA_FOLDER_, _WEB_STATS_MATCHES_
-import web_helpers as webh
+from conf import  _WEB_STATS_PLAYERS_, _DATA_FOLDER_, _WEB_STATS_MATCHES_, _WEB_STATS_PERF_
+import web_helpers as webh 
 import figc_helpers as figch
 import fbref_helpers as fbrefh
 
@@ -16,7 +16,9 @@ class data_preparator ():
     def init (self):
         self.logger = myprint ("data_preptor", self.debug)
         self.logger.print_info ("initializing..")
-        self.logger.print_info (msg = " - web-page players = %s" % _WEB_STATS_PLAYERS_)
+        self.logger.print_info (msg = " - web-page players   = %s" % _WEB_STATS_PLAYERS_)
+        self.logger.print_info (msg = " - web-page fixturess = %s" % _WEB_STATS_MATCHES_)
+        self.logger.print_info (msg = " - web-page peform    = %s" % _WEB_STATS_PERF_)
 
     def read_player_stats (self):
         web_content = webh.read_webpage (_WEB_STATS_PLAYERS_)
@@ -54,4 +56,21 @@ class data_preparator ():
         self.logger.print_debug ("   to %s" % json_file)
         from utils.management import save_json_from_dict
         save_json_from_dict (fixtures, json_file)
+        
+
+
+    def read_perf (self):
+        web_content = webh.read_webpage (_WEB_STATS_PERF_)
+        perf = fbrefh.decode_perf (web_content)
+        if self.debug:
+            for p in perf: self.logger.print_debug ("   for %s" % p["team"])
+        self.logger.print_info ("Storing output to JSON ..")
+        from utils.management import check_folder_and_create
+        check_folder_and_create (_DATA_FOLDER_)
+        matchday_folder = "%s/Matchday_%d" % (_DATA_FOLDER_, self.matchday)
+        check_folder_and_create (matchday_folder)
+        json_file = "%s/performance.json" % matchday_folder
+        self.logger.print_debug ("   to %s" % json_file)
+        from utils.management import save_json_from_dict
+        save_json_from_dict (perf, json_file)
         

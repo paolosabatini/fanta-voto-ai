@@ -10,7 +10,7 @@ def scrape_info ( text, key, left, right):
     line = [(x.strip()) for x in text.splitlines() if key in x][0]
     return line.split (left)[-1].split(right)[0]
 
-def get_div ( web_content, div_id = '', div_type = '' ):
+def get_div ( web_content, div_id = '', div_type = '', extra_label = '' ):
     div_content = str()        
     found = False
     if div_type == '' : return web_content
@@ -22,6 +22,8 @@ def get_div ( web_content, div_id = '', div_type = '' ):
             else:
                 if '<%s'%div_type not in l: continue
                 else: found = True
+
+            if extra_label != '' and not extra_label in l and found: found = False
         if found:
             div_content += '%s\n' % l
             if '</%s>'%div_type in l: break

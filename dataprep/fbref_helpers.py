@@ -35,4 +35,35 @@ def get_fixture_rows (content, matchweek):
     return [x for x in content.split ('</tr>') if '"gameweek" >%s<' % matchweek in x]
 
 
+def get_team_rows (content):
+    return [x for x in content.split ('</tr>') if "team" in x]
 
+def decode_perf (web_content):
+    table_content = get_div (web_content, div_type = 'table',
+                             div_id = 'stats_squads_standard_for',
+                             extra_label = '<caption>Squad Standard Stats')
+    perf = []
+
+    rows = get_team_rows (table_content)
+    for row in rows[1:]: # first row is header
+        perf.append (get_perf (row))
+
+    return perf
+
+def get_perf (row):
+    cols = row.split ("</td>")
+
+    perf = {}
+    perf['team'] = teamname2label ( scrape_info ( text = [col for col in cols if 'team' in col][0],
+                                          key = 'team',
+                                          left = 'Stats">', right = '<'  ) )
+
+    features = ['goals_per90', 'assists_per90', 'goals_assists_per90',
+                'goals_pens_per90', 'goals_assists_pens_per90']
+
+    for feat in features:
+        perf [feat] = scrape_info ( text = [col for col in cols if feat in col][0],
+                                    key = feat,
+                                    left = '"%s" >' % feat, right = '<' )
+
+    return perf

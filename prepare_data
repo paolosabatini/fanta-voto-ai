@@ -13,6 +13,7 @@ def main ():
     matchday = config.matchday
     noplayers = config.noplayers
     nofixtures = config.nofixtures
+    noperf = config.noperf
     mp = myprint ("prepare_data", debug)
     mp.banner ( mp.bold + "Data Preparation" + mp.endc + mp.color_info + "\n Downloading data for a given matchday\nData is stored in the data/ folder")
     mp.print_info ("MATCHDAY %d: data preparation" % matchday)
@@ -36,6 +37,13 @@ def main ():
     else:
         dp.read_fixtures()
 
+    mp.print_info ("Reading team performances..")
+    if noperf:
+        mp.print_warning ("   skipped")
+    else:
+        dp.read_perf()
+
+        
 def opt_parser ():
     from optparse import OptionParser
     parser = OptionParser()
@@ -43,6 +51,7 @@ def opt_parser ():
     parser.add_option("-m","--matchday", dest="matchday", help="Matchday of the downloaded dataset", default = 1)
     parser.add_option("--noplayers", dest="noplayers", action="store_true", help="Skip reading the players for the matchday", default = False)
     parser.add_option("--nofixtures", dest="nofixtures", action="store_true", help="Skip reading the fixtures for the matchday", default = False)
+    parser.add_option("--noperf", dest="noperf", action="store_true", help="Skip reading the team performances", default = False)
     (config, sys.argv[1:]) = parser.parse_args(sys.argv[1:])
     return config
 
