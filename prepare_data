@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+import os, sys
+from dataprep import *
+from utils.myprint import myprint
+
+def main ():
+    config = opt_parser()
+    debug = config.debug
+    matchday = config.matchday
+    mp = myprint ("prepare_data", debug)
+    mp.banner ( mp.bold + "Data Preparation" + mp.endc + mp.color_info + "\n Downloading data for a given matchday\nData is stored in the data/ folder")
+    mp.print_info ("MATCHDAY %d: data preparation" % matchday)
+
+    """ 
+    Getting statistics for all the players
+    """
+    dp = dataprep
+    print dp
+    
+
+
+def opt_parser ():
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option("-d","--debug", dest="debug", action="store_true", help="Switch on the debug", default = False)
+    parser.add_option("-m","--matchday", dest="matchday", help="Matchday of the downloaded dataset", default = 1)
+    (config, sys.argv[1:]) = parser.parse_args(sys.argv[1:])
+    return config
+
+if __name__ == "__main__":
+    main ()
