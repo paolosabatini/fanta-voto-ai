@@ -12,9 +12,9 @@ _WEB_STATS_PERF_ = "https://fbref.com/en/comps/208/Serie-A-Stats"
 # MySQL database connection
 _SQL_CONNECTION_ = {
     'host' : "34.121.170.108",
-    'username' : "lumen-dev",
+    'user' : "lumen-dev",
     'password' : "ldev-12-545",
-    'dbname' : "fantawomen"
+    'database' : "fantawomen"
 }
 
 # Folders to store output

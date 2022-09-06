@@ -14,6 +14,7 @@ def main ():
     noplayers = config.noplayers
     nofixtures = config.nofixtures
     noperf = config.noperf
+    novote = config.novote
     mp = myprint ("prepare_data", debug)
     mp.banner ( mp.bold + "Data Preparation" + mp.endc + mp.color_info + "\n Downloading data for a given matchday\nData is stored in the data/ folder")
     mp.print_info ("MATCHDAY %d: data preparation" % matchday)
@@ -31,17 +32,26 @@ def main ():
     else:
         dp.read_player_stats()
 
+    # getting match fixtures
     mp.print_info ("Reading match fixtures..")
     if nofixtures:
         mp.print_warning ("   skipped")
     else:
         dp.read_fixtures()
 
+    # getting team performances
     mp.print_info ("Reading team performances..")
     if noperf:
         mp.print_warning ("   skipped")
     else:
         dp.read_perf()
+
+    # getting team performances
+    mp.print_info ("Reading player votes..")
+    if novote:
+        mp.print_warning ("   skipped")
+    else:
+        dp.read_votes()
 
         
 def opt_parser ():
@@ -52,6 +62,7 @@ def opt_parser ():
     parser.add_option("--noplayers", dest="noplayers", action="store_true", help="Skip reading the players for the matchday", default = False)
     parser.add_option("--nofixtures", dest="nofixtures", action="store_true", help="Skip reading the fixtures for the matchday", default = False)
     parser.add_option("--noperf", dest="noperf", action="store_true", help="Skip reading the team performances", default = False)
+    parser.add_option("--novote", dest="novote", action="store_true", help="Skip reading votes from FW db", default = False)
     (config, sys.argv[1:]) = parser.parse_args(sys.argv[1:])
     return config
 
