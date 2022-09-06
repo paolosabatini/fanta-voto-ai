@@ -18,7 +18,7 @@ class myprint ():
         
     def print_color (self, msg, color = None):
         if not color: print (msg)
-        print (color + msg + self.endc)
+        else: print (color + msg + self.endc)
         
     def print_debug (self, msg):
         if self.level == 0 : return
