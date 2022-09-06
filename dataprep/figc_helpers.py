@@ -18,6 +18,7 @@ def get_dict_of_teams (content, base_url=''):
 
 def decode_these_players (content, team_name):
     from utils.converter import teamname2label, name2noutf8
+    from web_helpers import scrape_info
     list_of_player_texts = [ x.replace ('</tr>','') for x in content.split ('<tr>') if '</tr>' in x]
     dict_these_players = {}
     
@@ -50,6 +51,3 @@ def decode_these_players (content, team_name):
         
     return dict_these_players
 
-def scrape_info ( text, key, left, right):
-    line = [(x.strip()) for x in text.splitlines() if key in x][0]
-    return line.split (left)[-1].split(right)[0]

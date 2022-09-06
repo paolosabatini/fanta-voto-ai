@@ -2,15 +2,15 @@
 
 
 def teamname2label (name):
-    if name == "Como": return "COM"
-    elif name == "Pomigliano": return "POM"
-    elif name == "Parma": return "PAR"
+    if "Como" in name: return "COM"
+    elif "Pomigliano" in name: return "POM"
+    elif "Parma" in name: return "PAR"
     elif name == "Sassuolo": return "SAS"
-    elif name == "Sampdoria": return "SAM"
-    elif name == "Milan": return "MIL"
+    elif "Sampdoria" in name: return "SAM"
+    elif "Milan" in name: return "MIL"
     elif name == "Juventus": return "JUV"
-    elif name == "Roma": return "ROM"
-    elif name == "Inter": return "INT"
+    elif "Roma" in name: return "ROM"
+    elif "Inter" in name: return "INT"
     elif name == "Fiorentina": return "FIO"
     return name
 
