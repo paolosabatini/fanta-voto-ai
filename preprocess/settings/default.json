@@ -1,0 +1,15 @@
+{
+    "key" : "players/name",
+    "features" : {
+	"players" : ["Autogoal", "Minuti_giocati", "Goal", "Tiri", "Falli_commessi",
+		     "Tiri_in_porta", "Falli_subiti", "Ruolo", "Fuorigioco", "Squadra",
+		     "Cartellini_gialli", "Cartellini_rossi"]
+	
+    },
+    "label": "votes/Punteggio",
+    "transformer" : {
+	"std" : ["Autogoal", "Goal", "Tiri", "Falli_commessi", "Tiri_in_porta", "Falli_subiti", "Fuorigioco"],
+	"linear" : ["Minuti_giocati", "Cartellini_gialli", "Cartellini_rossi"]
+
+    }
+}
