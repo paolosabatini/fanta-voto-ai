@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+
+import os, sys
+from utils.myprint import myprint
+from preprocess.preprocessor import preprocessor
+
+"""
+Main function of the code
+"""
+def main ():
+    config = opt_parser()
+    debug = config.debug
+    setting = config.setting
+    label = config.label
+    mp = myprint ("prepare_data", debug)
+    mp.banner ( mp.bold + "Data Pre-processing" + mp.endc + mp.color_info + "\n Combining data from JSONs into series\n Preprocessing input to training")
+    mp.print_info ("Preprocessing setting: %s" % setting)
+
+    # defining the preprocessor class
+    preproc = preprocessor (setting = setting,
+                            debug = debug)
+
+    # read all the needed json and store in pandas
+    preproc.get_all_pandas ()
+
+    # apply preprocessing: connect different ds and pre-proc data
+    preproc.preprocess ()
+
+    # store the preprocessed data in pkl files
+    preproc.save ( label )
+
+
+"""
+ Configuration parser:
+ - d/debug : enable debug printout
+"""
+def opt_parser ():
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option("-d","--debug", dest="debug", action="store_true", help="Switch on the debug", default = False)
+    parser.add_option("-s","--setting", dest="setting",  help="Setting for the preprocessing", default = 'default')
+    parser.add_option("-l","--label", dest="label",  help="Label for the output pkl files", default = 'v1')
+    (config, sys.argv[1:]) = parser.parse_args(sys.argv[1:])
+    return config
+
+
+"""
+ Main function is called
+"""
+if __name__ == "__main__":
+    main ()
