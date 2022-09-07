@@ -22,3 +22,19 @@ def save_json_from_dict (dictionary, file_name):
         json.dump (dictionary, f)
 
 
+"""
+ Read the JSON file to dictionary
+"""
+def read_json_to_dict (file_name):
+    import json
+    with open (file_name,"r+") as f:
+        dictionary = json.load(f)
+    return dictionary
+
+
+"""
+ Get availaible matchdays
+"""
+def get_availaible_matchdays (path):
+    return [int(x.split("/")[-1].split("_")[-1]) for x in os.listdir(path)]
+

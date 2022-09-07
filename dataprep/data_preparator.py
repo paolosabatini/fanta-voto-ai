@@ -44,7 +44,7 @@ class data_preparator ():
             players.update ( figch.decode_these_players ( webh.read_webpage(team_complete_url), team_name) )
            
         self.logger.print_info ("Storing output to JSON ..")
-        self.save (perf, 'players')
+        self.save (players, 'players')
 
 
     # read and save the fixtures from web
@@ -55,7 +55,7 @@ class data_preparator ():
         if self.debug:
             for fxt in fixtures: self.logger.print_debug ("   %s %s %s-%s" % (fxt['home'], fxt['away'], fxt['goal_home'], fxt['goal_away']))
         self.logger.print_info ("Storing output to JSON ..")
-        self.save (perf, 'fixtures')
+        self.save (fixtures, 'fixtures')
 
         
     # read and save the team performance from web

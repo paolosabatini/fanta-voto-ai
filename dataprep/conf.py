@@ -23,3 +23,4 @@ _SQL_CONNECTION_ = {
 
 # Folders to store output
 _DATA_FOLDER_ = "data"
+_PKL_FOLDER_ = "pkl"

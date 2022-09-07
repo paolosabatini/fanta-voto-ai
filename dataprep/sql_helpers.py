@@ -39,9 +39,11 @@ class sqlmanager ():
         
     # get the votes: launching query and providing results
     def get_all_votes_per_matchday (self, matchday):
+        from utils.converter import name2noutf8
+        
         cmd = 'select c.Nome, c.Cognome, c.IDSquadra, pgc.Punteggio, pgc.PunteggioBonus, pgc.PunteggioTotale'
         cmd += ' from calciatrici c left join punteggio_giornate_calciatrici pgc on pgc.IDCalciatrice = c.IDCalciatrice'
-        cmd += ' where pgc.IDGiornata = %d' % matchday
+        cmd += ' where pgc.IDGiornata = %d and pgc.Presenza = 1' % matchday
 
         cursor = self.server.cursor()
         cursor.execute (cmd)
@@ -49,7 +51,7 @@ class sqlmanager ():
 
         votes_per_player = {}
         for vppr in votes_per_player_raw:
-            name = vppr[0] + ' ' + vppr [1]
+            name = name2noutf8(vppr[0] + ' ' + vppr [1])
             votes_per_player [name] = {
                 'Squadra' : vppr [2],
                 'Punteggio' : vppr [3],
