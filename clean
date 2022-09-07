@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Cleaning the temp files"
+rm *~
+rm *.pyc
+echo " -> subfolders"
+rm */*~
+rm */*.pyc
