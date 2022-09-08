@@ -133,3 +133,6 @@ dmypy.json
 *.py~
 *.pyc
 *~
+
+# conf file
+dataprep/conf.py
