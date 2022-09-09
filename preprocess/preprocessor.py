@@ -37,9 +37,9 @@ class preprocessor ():
             self.logger.print_debug ("   n. features\t fixtures\t 0")
 
         try:
-            self.logger.print_debug ("   n. features\t perf    \t %d" % len (self.configuration['features']['perf']))
+            self.logger.print_debug ("   n. features\t performance\t %d" % len (self.configuration['features']['performance']))
         except:
-            self.logger.print_debug ("   n. features\t perf    \t 0")
+            self.logger.print_debug ("   n. features\t performance\t 0")
 
 
 
@@ -65,15 +65,15 @@ class preprocessor ():
         label_ds = self.configuration['key'].split ("/")[0]
         if label_ds not in ds_to_read: ds_to_read.append (label_ds)
 
-        for ds in ['players', 'fixtures', 'perf', 'votes']:
-            if ds not in ds_to_read and ds in self.configuration['features'].keys(): ds_to_read.append (label_ds)
+        for ds in ['players', 'fixtures', 'performance', 'votes']:
+            if ds not in ds_to_read and ds in self.configuration['features'].keys(): ds_to_read.append (ds)
 
         return ds_to_read
 
 
     def get_cols (self):
         cols = [ self.configuration['label'].split ("/")[-1] ]
-        for ds in ['players', 'fixtures', 'perf', 'votes']:
+        for ds in ['players', 'fixtures', 'performance', 'votes']:
             if ds not in self.configuration['features'].keys(): continue
             for feat in self.configuration['features'][ds]:
                 if feat in cols: continue
@@ -88,8 +88,9 @@ class preprocessor ():
             self.pandas [md] = {}
             for ds in list_of_datasets:
                 dsname = "%s/Matchday_%d/%s.json" % (_DATA_FOLDER_, md, ds)
-                self.pandas [md] [ds] = pd.read_json (dsname, orient = 'index')
-                 
+                orient = 'index' if ds in ['players','votes'] else 'records'
+                self.pandas [md] [ds] = pd.read_json (dsname, orient = orient)
+                
                 
     def connect_and_select ( self, ds_to_connect = {} ):
         
@@ -102,6 +103,13 @@ class preprocessor ():
                                    on = "Squadra",
                                    how= "left", left_index=True, right_index=True,) 
         
+        if 'fixtures' in ds_to_connect.keys():
+            ds_home = ds_merged.reset_index().merge (  ds_to_connect['fixtures'],left_on = ["Squadra"], right_on = ["home"]).set_index('index')
+            ds_away = ds_merged.reset_index().merge (  ds_to_connect['fixtures'],left_on = ["Squadra"], right_on = ["away"]).set_index('index')
+            ds_merged = pd.concat ([ds_home, ds_away])
+
+        if 'performance' in ds_to_connect.keys():
+            ds_merged = ds_merged.reset_index().merge (  ds_to_connect['performance'], left_on = "Squadra",right_on = "team").set_index('index')
 
         return ds_merged [ self.get_cols() ] 
 
@@ -115,22 +123,34 @@ class preprocessor ():
         ds = self.pandas [key_to_transform]
 
         # gaussian scaler on the "continuous" variables
+
         from sklearn.preprocessing import scale
         std_scale_list = self.configuration['transformer']['std']
         cols_to_scale = [x for x in std_scale_list if x in self.get_cols() ]
+        self.logger.print_debug ("   std scaler to %s" % ", ".join (cols_to_scale))
         ds [ cols_to_scale ] = scale ( ds [ cols_to_scale ] )
 
         # linear scale on the other variables
         lin_scale_list = self.configuration['transformer']['linear']
         cols_to_scale = [x for x in lin_scale_list if x in self.get_cols() ]
+        self.logger.print_debug ("   linear scaler to %s" % ", ".join (cols_to_scale))
         ds [ cols_to_scale ] = self.linear_scale ( ds [ cols_to_scale ] )
 
         # role transformer
         if 'Ruolo' in self.get_cols():
             step_role = 10
             ds = ds.replace ("Attaccante", 3*step_role).replace ("Centrocampista", 2*step_role).replace ("Difensore", 1*step_role).replace ("Portiere", 0*step_role)
+            self.logger.print_debug ("   role transformer (A : %d, C : %d, D : %d, P : %d)" % (3*step_role, 2*step_role, 1*step_role, 0*step_role))
 
-
+        # augment
+        if 'augment' in self.configuration['transformer']:
+            import augmenter
+            self.logger.print_debug ("   augmenting now:")
+            
+            for var_aug in  self.configuration['transformer']['augment']:
+                self.logger.print_debug ("    ++ %s" % var_aug)
+                getattr (augmenter, var_aug) (ds)
+            
         return ds
 
     def linear_scale (self, df):
@@ -142,8 +162,6 @@ class preprocessor ():
                 df_norm[column] = (df_norm[column] - df_norm[column].min()) / (df_norm[column].max() - df_norm[column].min())
         
         return df_norm
-
-
 
         
     def preprocess (self):
