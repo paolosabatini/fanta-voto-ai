@@ -1,5 +1,5 @@
 # fanta-voto-ai
-ML algorithm to estimate the vote for FantaWomen based on available data.
+ML algorithm to estimate the vote for FantaWomen based on available data. More documentation in the dedicated [web-page](https://paolosabatini.github.io/fanta-voto-ai/).
 
 ## Plug & play recipes
 
