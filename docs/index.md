@@ -9,8 +9,8 @@ Documentation
 
 Below a simple diagram of the code structure, click on the boxes to access the documentation. Blocks in red are not ready/implemented.
 
-```mermaid
-flowchart LR
+<div class="mermaid">
+  flowchart LR
   subgraph "Data handling"
   figc[FIGC website] --> dp[Data preparation]
   fbref[FBREF website] --> dp[Data preparation]
@@ -29,6 +29,6 @@ flowchart LR
   click figc "https://www.figc.it/it/femminile/" _blank
   click fbref "https://fbref.com/en/" _blank
   click db "https://fbref.com/en/" _blank
-````
+</div>
 
 The list of models with performance are documented by clicking the model training and evaluation blocks.
