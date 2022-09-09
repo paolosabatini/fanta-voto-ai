@@ -12,6 +12,6 @@
 	"std" : ["Autogoal", "Goal", "Tiri", "Falli_commessi", "Tiri_in_porta", "Falli_subiti", "Fuorigioco"],
 	"linear" : ["Minuti_giocati", "Cartellini_gialli", "Cartellini_rossi"],
 	"augment" : ["goal_taken", "goal_scored"],
-	"clean" : ["Squadra", "team"]
+	"clean" : ["Squadra", "home", "away", "goal_home", "goal_away"]
     }
 }

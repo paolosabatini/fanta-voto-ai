@@ -150,7 +150,13 @@ class preprocessor ():
             for var_aug in  self.configuration['transformer']['augment']:
                 self.logger.print_debug ("    ++ %s" % var_aug)
                 getattr (augmenter, var_aug) (ds)
-            
+
+        # clean
+        if 'clean' in self.configuration['transformer']:
+            list_to_clean = self.configuration['transformer']['clean']
+            self.logger.print_debug ("   cleaning %s" % ", ".join (list_to_clean))
+            ds = ds.drop(list_to_clean, axis=1)
+
         return ds
 
     def linear_scale (self, df):
