@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+
+import os, sys
+from utils.myprint import myprint
+from training.trainer import trainer
+
+
+"""
+Main function of the code
+"""
+def main ():
+    config = opt_parser()
+    debug = config.debug
+    model = config.model
+    inputlabel = config.input
+    xvalidation = config.validation
+    
+    mp = myprint ("training", debug)
+    mp.banner ( mp.bold + "Model training" + mp.endc + mp.color_info + "\n Train the model on the input pkl files\n Save the model into pkl")
+
+    # training manager class
+    train = trainer ( debug = debug,
+                      model = model,
+                      input = inputlabel,
+                      xvalidation = xvalidation)
+    
+
+
+"""
+ Configuration parser:
+ - d/debug : enable debug printout
+"""
+def opt_parser ():
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option("-d","--debug", dest="debug", action="store_true", help="Switch on the debug", default = False)
+    parser.add_option("-m","--model", dest="model",  help="Model to train", default = None)
+    parser.add_option("-i","--input", dest="input",  help="Label of the input files", default = 'v1')
+    parser.add_option("-v","--validation", dest="validation",  help="Cross-validation to use", default = None)
+    (config, sys.argv[1:]) = parser.parse_args(sys.argv[1:])
+    return config
+
+
+"""
+ Main function is called
+"""
+if __name__ == "__main__":
+    main ()
+
