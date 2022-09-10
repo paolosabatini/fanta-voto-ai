@@ -29,6 +29,6 @@ flowchart LR
   click figc "https://www.figc.it/it/femminile/" _blank
   click fbref "https://fbref.com/en/" _blank
   click db "https://fbref.com/en/" _blank
-````
+</div>
 
 The list of models with performance are documented by clicking the model training and evaluation blocks.
