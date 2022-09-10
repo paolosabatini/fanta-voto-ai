@@ -9,6 +9,11 @@ Documentation
 
 Below a simple diagram of the code structure, click on the boxes to access the documentation. Blocks in red are not ready/implemented.
 
+__edit:__ unfortunately `mermaid diagrams` are not supported by `gh-pages` at the moment. The diagram is now converted in a static image and links are not working. Links to the documentations is provided below.
+
+![Diagram (last update: 10/09/2022)][img/scheme_220910.png]
+
+<!--
 ```mermaid!
 flowchart LR
   subgraph "Data handling"
@@ -30,5 +35,6 @@ flowchart LR
   click fbref "https://fbref.com/en/" _blank
   click db "https://fbref.com/en/" _blank
 ```
+-->
 
 The list of models with performance are documented by clicking the model training and evaluation blocks.
