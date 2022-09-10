@@ -38,3 +38,8 @@ def read_json_to_dict (file_name):
 def get_availaible_matchdays (path):
     return [int(x.split("/")[-1].split("_")[-1]) for x in os.listdir(path)]
 
+"""
+ Check file is actually there 
+"""
+def is_this_file_there (path_to_file):
+    return os.path.exists (path_to_file)
