@@ -9,7 +9,7 @@ Documentation
 
 Below a simple diagram of the code structure, click on the boxes to access the documentation. Blocks in red are not ready/implemented.
 
-```mermaid
+```mermaid!
 flowchart LR
   subgraph "Data handling"
   figc[FIGC website] --> dp[Data preparation]
