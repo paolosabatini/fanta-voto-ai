@@ -42,4 +42,13 @@ def get_availaible_matchdays (path):
  Check file is actually there 
 """
 def is_this_file_there (path_to_file):
+    if not path_to_file: return False
     return os.path.exists (path_to_file)
+
+"""
+ Check file is actually there 
+"""
+def is_this_folder_there (path_to_folder):
+    if not path_to_folder: return False
+    return os.path.isdir (path_to_folder)
+

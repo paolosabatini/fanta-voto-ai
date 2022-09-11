@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+
+import os, sys
+from utils.myprint import myprint
+from utils.management import is_this_file_there, is_this_folder_there
+
+
+"""
+Main function of the code
+"""
+def main ():
+    config = opt_parser()
+    debug = config.debug
+    analysis_name = config.analysis
+    output_label = config.label
+    input_folder = config.input
+
+    mp = myprint ("testing", debug)
+    mp.banner ( mp.bold + "Model testing/validation" + mp.endc + mp.color_info + "\n Test performance of trained model\n Let's see the good work!")
+
+    if not is_this_folder_there (input_folder):
+        mp.print_error ("Input folder '%s' not found: EXIT" % input_folder)
+        exit(1)
+
+    
+    if not analysis_name:
+        mp.print_error ("No analysis name given: EXIT")
+    else:
+        mp.print_info ("importing analysis: %s" % analysis_name)
+        # import tha analysis
+        analysis_import_cmd = 'from testing.{0} import {0} as analysis'.format( analysis_name )
+
+        expected_analysis_file_name = "testing/%s.py" % analysis_name
+        if not is_this_file_there (expected_analysis_file_name):
+            mp.print_error ("analysis '%s' not found: EXIT" % analysis_name)
+            exit(1)
+        else:
+            exec (analysis_import_cmd)
+
+
+        
+    # analysis construction
+    ana = analysis (debug = debug,
+                    input_folder = input_folder)
+        
+
+        
+ 
+
+
+
+"""
+ Configuration parser
+"""
+def opt_parser ():
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option("-d","--debug", dest="debug", action="store_true", help="Switch on the debug", default = False)
+    parser.add_option("-a","--analysis", dest="analysis",  help="Name of the analysis to load", default = None)
+    parser.add_option("-i","--inputFolder", dest="input",  help="Folder of the input model/datasets", default = None)
+    parser.add_option("-l","--label", dest="label",  help="Label for the output plots", default = 'test')
+    (config, sys.argv[1:]) = parser.parse_args(sys.argv[1:])
+    return config
+
+
+"""
+ Main function is called
+"""
+if __name__ == "__main__":
+    main ()
+
