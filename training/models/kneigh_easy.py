@@ -10,3 +10,10 @@ def get ():
                                   weights = weights)
 
     return model
+
+
+def train ( X, y):
+    model= get()
+    model.fit (X,y)
+    return model
+    

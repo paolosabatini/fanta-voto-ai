@@ -19,11 +19,17 @@ def main ():
     mp.banner ( mp.bold + "Model training" + mp.endc + mp.color_info + "\n Train the model on the input pkl files\n Save the model into pkl")
 
     # training manager class
-    train = trainer ( debug = debug,
+    trn = trainer ( debug = debug,
                       model = model,
                       input = inputlabel,
                       xvalidation = xvalidation)
-    
+
+    # train the model
+    trn.train ()
+
+
+    # save the model
+    # trainer.save ()
 
 
 """

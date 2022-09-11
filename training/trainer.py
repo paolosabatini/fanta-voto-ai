@@ -42,7 +42,7 @@ class trainer ():
         model_file = 'training/models/%s.py' % self.model
         model_import_str = "import models.%s as mymodel" % (self.model)
         exec (model_import_str)
-        self.mdl = mymodel.get()
+        self.mdl = mymodel
 
         
     def init_input (self):
@@ -53,8 +53,9 @@ class trainer ():
         # init X, y
         target = 'Punteggio'
         features = [x for x in self.df['initial'].columns.tolist() if x != target]
-        self.df ['X'] = self.df ["initial"] [ features ].reset_index () # useful to have int index here
-        self.df ['y'] = self.df ["initial"] [ target ].reset_index () # useful to have int index here
+        # Some final touches: set indices as int and remove names
+        self.df ['X'] = self.df ["initial"] [ features ].reset_index ().drop(["index"], axis =1) 
+        self.df ['y'] = self.df ["initial"] [ target ].reset_index ().drop(["index"], axis =1 )
 
 
     def init_train_test (self):
@@ -80,6 +81,15 @@ class trainer ():
                 self.df['y_test'].append ( self.df['y'].iloc[ index_test ] )
 
         self.logger.print_debug ("   \t\t ..done")
+        
+
+    def train (self):
+        self.logger.print_info ("training..")
+        n_training_sets = len (self.df['X_train'])
+        self.trained_models = []
+        for itrain in range (n_training_sets):
+            self.logger.print_info (" - set %d/%d" % (itrain+1, n_training_sets))
+            self.trained_models.append (self.mdl.train ( self.df['X_train'][itrain], self.df['y_train'][itrain] ))
         
         
 
