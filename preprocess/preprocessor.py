@@ -151,6 +151,12 @@ class preprocessor ():
                 self.logger.print_debug ("    ++ %s" % var_aug)
                 getattr (augmenter, var_aug) (ds)
 
+            self.logger.print_debug ("     need to pre-process the augmented variables")
+            augment_to_std = [x for x in self.configuration['transformer']['augment'] if x in std_scale_list]
+            augment_to_lin = [x for x in self.configuration['transformer']['augment'] if x in lin_scale_list]
+            ds [ augment_to_std ] = scale ( ds [ augment_to_std ] )
+            ds [ augment_to_lin ] = self.linear_scale ( ds [ augment_to_lin ] )
+            
         # clean
         if 'clean' in self.configuration['transformer']:
             list_to_clean = self.configuration['transformer']['clean']

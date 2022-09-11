@@ -9,9 +9,10 @@
     },
     "label": "votes/Punteggio",
     "transformer" : {
-	"std" : ["Autogoal", "Goal", "Tiri", "Falli_commessi", "Tiri_in_porta", "Falli_subiti", "Fuorigioco"],
-	"linear" : ["Minuti_giocati", "Cartellini_gialli", "Cartellini_rossi"],
 	"augment" : ["goal_taken", "goal_scored"],
+	"std" : ["Autogoal", "Goal", "Tiri", "Falli_commessi", "Tiri_in_porta", "Falli_subiti", "Fuorigioco","goal_taken", "goal_scored", "goals_per90","assists_per90", "goals_pens_per90"],
+	"linear" : ["Minuti_giocati", "Cartellini_gialli", "Cartellini_rossi"],
+	
 	"clean" : ["Squadra", "home", "away", "goal_home", "goal_away"]
     }
 }
