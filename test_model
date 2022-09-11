@@ -42,7 +42,11 @@ def main ():
     # analysis construction
     ana = analysis (debug = debug,
                     input_folder = input_folder)
-        
+
+
+    # analysis execution
+    ana.execute()
+
 
         
  

@@ -10,7 +10,7 @@ class simple ():
         self.input_folder = input_folder
         self.init()
         
-
+    
     def init (self):
         self.logger = myprint ("simple   ", self.debug)
         self.logger.print_info ("initializing..")
@@ -23,3 +23,8 @@ class simple ():
         else:
             self.logger.print_error ("Failed reading the input files: EXIT")
             exit (1)
+
+
+    
+    def execute (self):
+        print self.df['X_train_0'].head ()
