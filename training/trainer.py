@@ -94,13 +94,15 @@ class trainer ():
         
     def save (self, label):
         import pickle
-        self.logger.print_info ("saving the trained model..")
+
         n_trained_models = len (self.trained_models)
         path_for_models = 'pkl/%s/model' % self.input
         from utils.management import check_folder_and_create
         check_folder_and_create (path_for_models)
         path_for_thismodel = '%s/%s' % (path_for_models, label)
         check_folder_and_create (path_for_thismodel)
+        self.logger.print_info ("saving the trained model in %s" % path_for_thismodel)
+
         for imodel in range (n_trained_models):
             self.logger.print_info (" - model, test & train %d/%d" % (imodel+1, n_trained_models))
             
