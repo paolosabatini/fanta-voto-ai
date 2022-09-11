@@ -90,9 +90,32 @@ class trainer ():
         for itrain in range (n_training_sets):
             self.logger.print_info (" - set %d/%d" % (itrain+1, n_training_sets))
             self.trained_models.append (self.mdl.train ( self.df['X_train'][itrain], self.df['y_train'][itrain] ))
+        self.logger.print_info ("\t..done.")
         
-        
+    def save (self, label):
+        import pickle
+        self.logger.print_info ("saving the trained model..")
+        n_trained_models = len (self.trained_models)
+        path_for_models = 'pkl/%s/model' % self.input
+        from utils.management import check_folder_and_create
+        check_folder_and_create (path_for_models)
+        path_for_thismodel = '%s/%s' % (path_for_models, label)
+        check_folder_and_create (path_for_thismodel)
+        for imodel in range (n_trained_models):
+            self.logger.print_info (" - model, test & train %d/%d" % (imodel+1, n_trained_models))
+            
+            model_pkl_name = "%s/%s_%d.pkl" % (path_for_thismodel, self.model, imodel)
+            pickle.dump (self.trained_models[imodel], open (model_pkl_name, 'w+'))
+            self.logger.print_debug ("   saved model to %s" % (model_pkl_name))
+            
+            for ds_name in ['X_train', 'y_train', 'X_test', 'y_test']:
+                df_pkl_name = "%s/%s_%d.pkl" % (path_for_thismodel, ds_name, imodel)
+                self.df[ds_name][imodel].to_pickle (df_pkl_name)
+                self.logger.print_debug ("   saved %s to %s" % (ds_name,df_pkl_name))
 
+        self.logger.print_info ("   ..done")
+
+            
     def get_frac_train_test ( self, frac_train ):
         from sklearn.model_selection import train_test_split
         return train_test_split (self.df['X'],self.df['y'], test_size = frac_train, random_state = 1)

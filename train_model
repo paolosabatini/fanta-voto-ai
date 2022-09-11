@@ -14,6 +14,7 @@ def main ():
     model = config.model
     inputlabel = config.input
     xvalidation = config.validation
+    outputlabel = config.label
     
     mp = myprint ("training", debug)
     mp.banner ( mp.bold + "Model training" + mp.endc + mp.color_info + "\n Train the model on the input pkl files\n Save the model into pkl")
@@ -29,7 +30,7 @@ def main ():
 
 
     # save the model
-    # trainer.save ()
+    trn.save (outputlabel)
 
 
 """
@@ -42,6 +43,7 @@ def opt_parser ():
     parser.add_option("-d","--debug", dest="debug", action="store_true", help="Switch on the debug", default = False)
     parser.add_option("-m","--model", dest="model",  help="Model to train", default = None)
     parser.add_option("-i","--input", dest="input",  help="Label of the input files", default = 'v1')
+    parser.add_option("-l","--label", dest="label",  help="Label for the output model", default = 'test')
     parser.add_option("-v","--validation", dest="validation",  help="Cross-validation to use", default = None)
     (config, sys.argv[1:]) = parser.parse_args(sys.argv[1:])
     return config
