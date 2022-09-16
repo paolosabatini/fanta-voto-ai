@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import pandas as pd
+import numpy as np
+
 def init_input_for_analysis ( analysis ):
     if not analysis: return False
     
@@ -40,3 +42,27 @@ def get_list_of_models ( analysis ):
     return (len (glob.glob (wildcard)))
     
         
+
+def get_array_from_series (df_coll, col_name):
+    n_models = len ([ x for x in df_coll.keys() if col_name in x])
+    return np.concatenate ( [ df_coll['%s_%d' % (col_name, i)].to_numpy() for i in range (n_models) ], axis=0  )
+
+
+
+
+def decode_position (val):
+    step = 10
+    if val == 0: return 'G' #'P'
+    elif val == step: return 'D'
+    elif val == 2*step: return 'M' # 'C'
+    elif val == 3*step: return 'F' # 'A'
+    return 'UNKNOWN'
+
+
+def encode_position (pos):
+    step = 10
+    if pos == 'G' or pos == 'P': return 0 
+    if pos == 'D': return step 
+    if pos == 'C' or pos == 'M': return 1*step 
+    if pos == 'A' or pos == 'F': return 2*step 
+    return 'UNKNOWN'

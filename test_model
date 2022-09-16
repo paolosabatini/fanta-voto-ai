@@ -48,7 +48,8 @@ def main ():
     ana.execute()
 
 
-        
+    # save output
+    ana.save( output_label )
  
 
 
