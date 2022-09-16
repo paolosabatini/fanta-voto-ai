@@ -102,7 +102,7 @@ class preprocessor ():
                                    right = ds_to_connect['players'],
                                    on = "Squadra",
                                    how= "left", left_index=True, right_index=True,) 
-        
+            
         if 'fixtures' in ds_to_connect.keys():
             ds_home = ds_merged.reset_index().merge (  ds_to_connect['fixtures'],left_on = ["Squadra"], right_on = ["home"]).set_index('index')
             ds_away = ds_merged.reset_index().merge (  ds_to_connect['fixtures'],left_on = ["Squadra"], right_on = ["away"]).set_index('index')
@@ -114,14 +114,12 @@ class preprocessor ():
         return ds_merged [ self.get_cols() ] 
 
 
-
     def concatenate ( self, key_to_concatenate ):
-        return pd.concat ( [self.pandas[md][key_to_concatenate] for md in self.matchdays], axis = 1 )
+        return pd.concat ( [self.pandas[md][key_to_concatenate] for md in self.matchdays], axis = 0 )
 
 
     def transform ( self, key_to_transform ):
         ds = self.pandas [key_to_transform]
-
         # gaussian scaler on the "continuous" variables
 
         from sklearn.preprocessing import scale

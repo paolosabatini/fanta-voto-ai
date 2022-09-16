@@ -57,7 +57,7 @@ class trainer ():
         self.df ['X'] = self.df ["initial"] [ features ].reset_index ().drop(["index"], axis =1) 
         self.df ['y'] = self.df ["initial"] [ target ].reset_index ().drop(["index"], axis =1 )
 
-
+        
     def init_train_test (self):
         self.logger.print_debug ("   \tinit. train/test samples")
         

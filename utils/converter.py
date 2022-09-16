@@ -52,6 +52,13 @@ def convert_mismatching_names (name):
     if "Vanessa" in name and "Panzeri" in name: return "Vanessa Panzeri"
     if "Boquete" in name: return "Veronica Boquete"
     if "Rincon" in name: return "Yoreli Rincon"
+    if "Lineth" in name and 'Cede' in name: return "Lineth Cedeno"
+    if "Zamanian" in name: return "Annahita Zamanian"
+    if "Njoya" in name: return "Ajara Nchout Njoya"
+    if "Tatiely" in name: return "Cristina Sena Das Neves Tatiely"
+    if "Linberg" in name : return "Camilla Linberg"
+    if "Karlern" in name and "Julia" in name: return "Julia Karlernas"
+    if "Stapelfeldt" in name: return "Nina Stapelfeldt"
     return name
 
 def name2noutf8 (name):
