@@ -69,7 +69,7 @@ def opt_parser ():
     from optparse import OptionParser
     parser = OptionParser()
     parser.add_option("-d","--debug", dest="debug", action="store_true", help="Switch on the debug", default = False)
-    parser.add_option("-m","--matchday", dest="matchday", help="Matchday of the downloaded dataset", default = 1)
+    parser.add_option("-m","--matchday", type=int, dest="matchday", help="Matchday of the downloaded dataset", default = 1)
     parser.add_option("--noplayers", dest="noplayers", action="store_true", help="Skip reading the players for the matchday", default = False)
     parser.add_option("--nofixtures", dest="nofixtures", action="store_true", help="Skip reading the fixtures for the matchday", default = False)
     parser.add_option("--noperf", dest="noperf", action="store_true", help="Skip reading the team performances", default = False)

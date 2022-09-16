@@ -42,11 +42,47 @@ class data_preparator ():
             self.logger.print_debug( "   from " + str(team_name) )
             team_complete_url = _WEB_STATS_PLAYERS_ + team_url
             players.update ( figch.decode_these_players ( webh.read_webpage(team_complete_url), team_name) )
-           
+
+        if self.matchday>1:
+            players = self.subtract_previous_matchday (players, 'players')
+
+            
         self.logger.print_info ("Storing output to JSON ..")
         self.save (players, 'players')
 
+    def sum_player_stats_from_jsons (self, previous_jsons):
 
+        from utils.management import read_json_to_dict
+        summed = {}
+        for json in previous_jsons:
+            curr_players = read_json_to_dict (json)
+            for player_name in curr_players:
+                if player_name not in summed:
+                    summed [player_name] = curr_players [player_name]
+                else:
+                    for stat in summed[player_name]:
+                        if stat in ['Ruolo','Squadra','Maglia']: continue
+                        summed[player_name][stat] += curr_players [player_name][stat]
+
+        return summed
+
+        
+    def subtract_previous_matchday (self, players, name_of_json):
+
+        previous_jsons = [ 'data//Matchday_%d/%s.json' % (i, name_of_json) for i in range (1, self.matchday) ]
+        self.logger.print_debug( "   subtracting player stats from previous %d matchdays" % len(previous_jsons) )        
+        summed_previous_matchday = self.sum_player_stats_from_jsons (previous_jsons)
+
+        for player_name in players:
+            if player_name not in summed_previous_matchday: continue
+            for stat in players [player_name]:
+                if stat in ['Ruolo','Squadra','Maglia']: continue
+                players [player_name][stat] = float (players [player_name][stat]) - float(summed_previous_matchday [player_name][stat])
+
+        return players
+            
+        
+        
     # read and save the fixtures from web
     # TODO: find a better place to get match info
     def read_fixtures (self):
