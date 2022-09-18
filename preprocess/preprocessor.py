@@ -81,6 +81,10 @@ class preprocessor ():
 
         return cols
 
+    def get_augmented_cols (self):
+        cols = self.configuration['transformer']['augment']
+        return cols
+
     def import_all_json_to_pandas (self, list_of_datasets = []):
         import copy
         self.pandas = {}
@@ -109,7 +113,8 @@ class preprocessor ():
             ds_merged = pd.concat ([ds_home, ds_away])
 
         if 'performance' in ds_to_connect.keys():
-            ds_merged = ds_merged.reset_index().merge (  ds_to_connect['performance'], left_on = "Squadra",right_on = "team").set_index('index')
+            ds_merged = ds_merged.reset_index().merge (  ds_to_connect['performance'], left_on = "home",right_on = "team").set_index('index')
+            ds_merged = ds_merged.reset_index().merge (  ds_to_connect['performance'], left_on = "away",right_on = "team", suffixes = ['','_away']).set_index('index')
 
         return ds_merged [ self.get_cols() ] 
 
@@ -120,25 +125,7 @@ class preprocessor ():
 
     def transform ( self, key_to_transform ):
         ds = self.pandas [key_to_transform]
-        # gaussian scaler on the "continuous" variables
 
-        from sklearn.preprocessing import scale
-        std_scale_list = self.configuration['transformer']['std']
-        cols_to_scale = [x for x in std_scale_list if x in self.get_cols() ]
-        self.logger.print_debug ("   std scaler to %s" % ", ".join (cols_to_scale))
-        ds [ cols_to_scale ] = scale ( ds [ cols_to_scale ] )
-
-        # linear scale on the other variables
-        lin_scale_list = self.configuration['transformer']['linear']
-        cols_to_scale = [x for x in lin_scale_list if x in self.get_cols() ]
-        self.logger.print_debug ("   linear scaler to %s" % ", ".join (cols_to_scale))
-        ds [ cols_to_scale ] = self.linear_scale ( ds [ cols_to_scale ] )
-
-        # role transformer
-        if 'Ruolo' in self.get_cols():
-            step_role = 10
-            ds = ds.replace ("Attaccante", 3*step_role).replace ("Centrocampista", 2*step_role).replace ("Difensore", 1*step_role).replace ("Portiere", 0*step_role)
-            self.logger.print_debug ("   role transformer (A : %d, C : %d, D : %d, P : %d)" % (3*step_role, 2*step_role, 1*step_role, 0*step_role))
 
         # augment
         if 'augment' in self.configuration['transformer']:
@@ -149,12 +136,27 @@ class preprocessor ():
                 self.logger.print_debug ("    ++ %s" % var_aug)
                 getattr (augmenter, var_aug) (ds)
 
-            self.logger.print_debug ("     need to pre-process the augmented variables")
-            augment_to_std = [x for x in self.configuration['transformer']['augment'] if x in std_scale_list]
-            augment_to_lin = [x for x in self.configuration['transformer']['augment'] if x in lin_scale_list]
-            ds [ augment_to_std ] = scale ( ds [ augment_to_std ] )
-            ds [ augment_to_lin ] = self.linear_scale ( ds [ augment_to_lin ] )
-            
+
+        # gaussian scaler on the "continuous" variables
+        from sklearn.preprocessing import scale
+        std_scale_list = self.configuration['transformer']['std']
+        
+        cols_to_scale = [x for x in std_scale_list if x in self.get_cols()+self.get_augmented_cols()  ]
+        self.logger.print_debug ("   std scaler to %s" % ", ".join (cols_to_scale))
+        ds [ cols_to_scale ] = scale ( ds [ cols_to_scale ] )
+
+        # linear scale on the other variables
+        lin_scale_list = self.configuration['transformer']['linear']
+        cols_to_scale = [x for x in lin_scale_list if x in self.get_cols()+self.get_augmented_cols()   ]
+        self.logger.print_debug ("   linear scaler to %s" % ", ".join (cols_to_scale))
+        ds [ cols_to_scale ] = self.linear_scale ( ds [ cols_to_scale ] )
+
+        # role transformer
+        if 'Ruolo' in self.get_cols():
+            step_role = 10
+            ds = ds.replace ("Attaccante", 3*step_role).replace ("Centrocampista", 2*step_role).replace ("Difensore", 1*step_role).replace ("Portiere", 0*step_role)
+            self.logger.print_debug ("   role transformer (A : %d, C : %d, D : %d, P : %d)" % (3*step_role, 2*step_role, 1*step_role, 0*step_role))
+
         # clean
         if 'clean' in self.configuration['transformer']:
             list_to_clean = self.configuration['transformer']['clean']
