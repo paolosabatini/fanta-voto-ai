@@ -1,0 +1,24 @@
+{
+    "key" : "players/name",
+    "features" : {
+	"players" : ["Autogoal", "Minuti_giocati", "Goal", "Tiri", "Falli_commessi",
+		     "Tiri_in_porta", "Falli_subiti", "Ruolo", "Fuorigioco", "Squadra",
+		     "Cartellini_gialli", "Cartellini_rossi"],
+	"fixtures" : ["home", "away", "goal_home", "goal_away"],
+	"performance" : ["goals_per90","assists_per90", "goals_pens_per90",
+			 "goals_per90_away","assists_per90_away", "goals_pens_per90_away"]
+    },
+    "label": "votes/Punteggio",
+    "transformer" : {
+	"augment" : ["goal_taken", "goal_scored", "this_goals_per90", "opponent_goals_per90",
+		     "this_assists_per90", "opponent_assists_per90", "this_goals_pens_per90",
+		     "opponent_goals_pens_per90", "total_shots_made", "total_shots_taken",
+		     "total_fouls_made", "total_fouls_taken", "other_team"],
+	"std" : [],
+	"linear" : [],
+	
+	"clean" : ["Squadra", "goal_home", "goal_away",
+		   "goals_per90","assists_per90", "goals_pens_per90",
+		   "goals_per90_away","assists_per90_away", "goals_pens_per90_away"  ]
+    }
+}
