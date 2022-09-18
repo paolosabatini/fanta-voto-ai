@@ -143,13 +143,13 @@ class preprocessor ():
         
         cols_to_scale = [x for x in std_scale_list if x in self.get_cols()+self.get_augmented_cols()  ]
         self.logger.print_debug ("   std scaler to %s" % ", ".join (cols_to_scale))
-        ds [ cols_to_scale ] = scale ( ds [ cols_to_scale ] )
+        if cols_to_scale != []: ds [ cols_to_scale ] = scale ( ds [ cols_to_scale ] )
 
         # linear scale on the other variables
         lin_scale_list = self.configuration['transformer']['linear']
         cols_to_scale = [x for x in lin_scale_list if x in self.get_cols()+self.get_augmented_cols()   ]
         self.logger.print_debug ("   linear scaler to %s" % ", ".join (cols_to_scale))
-        ds [ cols_to_scale ] = self.linear_scale ( ds [ cols_to_scale ] )
+        if cols_to_scale != []: ds [ cols_to_scale ] = self.linear_scale ( ds [ cols_to_scale ] )
 
         # role transformer
         if 'Ruolo' in self.get_cols():
