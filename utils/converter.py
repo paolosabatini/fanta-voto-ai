@@ -1,5 +1,26 @@
 #!/usr/bin/env python
 
+def convert_to_axis_label (name):
+    if name == 'Tiri': return 'Shots'
+    elif name == 'Tiri_in_porta': return 'Shots on target'
+    elif name == 'Falli_commessi': return 'Fouls done'
+    elif name == 'Falli_subiti': return 'Fouls against'
+    elif name == 'Cartellini_gialli': return 'Yellow cards'
+    elif name == 'Cartellini_rossi': return 'Red cards'
+    elif name == "goal_taken": return 'Goals against'
+    elif name == "goal_scored": return 'Goals scored'
+    elif name == "total_shots_made": return 'Team shots'
+    elif name == "total_shots_taken": return 'Team shots against'
+    elif name == "total_fouls_made": return 'Team fouls'
+    elif name == "total_fouls_taken": return 'Team fouls against'
+    elif name == "this_goals_per90": return 'Team average goals / 90 mins'
+    elif name == "opponent_goals_per90": return 'Opponent team average goals / 90 mins'
+    elif name == "this_assists_per90": return 'Team average assists / 90 mins'
+    elif name == "opponent_assists_per90": return 'Opponent team average assists / 90 mins'
+    elif name == "this_goals_pen_per90": return 'Team average penalty goals / 90 mins'
+    elif name == "opponent_goals_pen_per90": return 'Opponent team average penalty goals / 90 mins'
+    return name.replace ("_", " ")
+
 
 def teamname2label (name):
     if "Como" in name: return "COM"

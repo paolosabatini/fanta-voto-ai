@@ -77,6 +77,9 @@ def correlation_plot ( xarray, yarray, xlabel=None, ylabel=None, xlim=None, ylim
 
 
 def residual_vs_var_plot (data, labels, xlabel=None, ylabel=None, xlim=None, ylim=None, decos = []):
+    return box_vs_var_plot (data, labels, xlabel, ylabel, xlim, ylim, decos )
+
+def box_vs_var_plot (data, labels, xlabel=None, ylabel=None, xlim=None, ylim=None, decos = []):
     
     fig,ax = plt.subplots()
 
@@ -131,18 +134,78 @@ def draw_vector_labels ( xf, yf, ax, labels, size = None, step = 0.05):
 
 
 
-def scat_plot_diff_classes (list_of_data, labels, xlabel, ylabel,  xaxislabel=None, yaxislabel=None, xlim=None, ylim=None, decos = []):
+def poly_fitter (x, y, degree = 1, cov = False):
+    pars, Cpars = np.polyfit (x, y, deg=degree, cov=True)
+    xx= np.vstack([x**(degree-i) for i in range(degree+1)]).T
+    y_lin = np.dot (xx,pars)
+    if cov:
+        C_y_lin = np.dot(xx, np.dot(Cpars, xx.T)) # C_y_lin = xx*Cpars*xx.T
+        sig_y_lin = np.sqrt(np.diag(C_y_lin))  # Standard deviations are sqrt of diagonal
+        return y_lin, sig_y_lin
+    return y_lin
+            
+def scat_plot_diff_classes (list_of_data, labels, xlabel, ylabel,  xaxislabel=None, yaxislabel=None, xlim=None, ylim=None, decos = [], do_fit=False, do_legend = True):
 
+    markers = [4, 5, 6, 7]
+               
     fig,ax = plt.subplots()
 
     for ids, ds in enumerate (list_of_data):
-        ax.scatter (ds[xlabel].to_numpy(), ds[ylabel].to_numpy(), label = labels[ids])
-        
+        ax.scatter (ds[xlabel].to_numpy(), ds[ylabel].to_numpy(), label = labels[ids], marker = markers[ids])
+
+    if do_fit:
+        degree = 1
+        prediction = poly_fitter ( ds[xlabel].to_numpy(), ds[ylabel].to_numpy(), degree )
+        ax.plot(ds[xlabel].to_numpy(), prediction, linestyle='dotted')
+
         
     if xlabel: ax.set_xlabel(xaxislabel, fontsize=10)
     if ylabel: ax.set_ylabel(yaxislabel, fontsize=10)
     if xlim: plt.xlim (xlim[0], xlim[-1])
     if ylim: plt.ylim (ylim[0], ylim[-1])
 
+    draw_vector_labels (0.05,0.95, ax, decos)
+    if do_legend: ax.legend()
     
+    insert_logo (ax)
+
+    
+    return fig
+
+
+def get_bins_on_this_column (col, nbins = 20, integer = False):
+    xmin = col.min()
+    xmax = col.max()
+    if integer:
+        nbins = xmax-xmin+1
+    return np.linspace(xmin, xmax, nbins)
+
+def hist_per_classes (df, classification = None, variable = '', nbins = 20, integer = False, xaxislabel=None, yaxislabel=None, xlim=None, ylim=None, decos = []):
+    from analysis_helpers import encode_position
+
+    fig, ax = plt.subplots()
+    values = df [variable]
+    if classification == 'position':
+        from mycolorpy import colorlist as mcp
+        colors = mcp.gen_color(cmap="Set2", n=8)
+        mybins = get_bins_on_this_column (df[variable], nbins, integer = integer)
+        plt.hist ( df [variable] [df ['Ruolo'] == encode_position ('G')].to_numpy(), mybins, facecolor = colors[0], edgecolor = colors[0], alpha = 0.5, density = True, label = 'Goalkeeper')
+        plt.hist ( df [variable] [df ['Ruolo'] == encode_position ('D')].to_numpy(), mybins, facecolor = "none", edgecolor = colors[1], linestyle = "dashed", linewidth=2, density = True, histtype = "step" , label = 'Defender')
+        plt.hist ( df [variable] [df ['Ruolo'] == encode_position ('M')].to_numpy(), mybins, facecolor = "none", edgecolor = colors[2], linestyle = "dashed", linewidth=2, density = True, histtype = "step" , label = 'Midfielder')
+        plt.hist ( df [variable] [df ['Ruolo'] == encode_position ('F')].to_numpy(), mybins, facecolor = colors[-2], edgecolor = colors[-2], alpha = 0.5, density = True , label = 'Forward')
+        
+        ax.legend()
+    elif not classification:
+        from mycolorpy import colorlist as mcp
+        colors = mcp.gen_color(cmap="Set2", n=8)
+        mybins = get_bins_on_this_column (df[variable], nbins, integer = integer)
+        plt.hist ( df [variable].to_numpy(), mybins, color = colors[0], alpha = 0.5, density = True)
+
+    if xaxislabel: ax.set_xlabel(xaxislabel, fontsize=10)
+    if yaxislabel: ax.set_ylabel(yaxislabel, fontsize=10)
+    if xlim: plt.xlim (xlim[0], xlim[-1])
+    if ylim: plt.ylim (ylim[0], ylim[-1])
+
+    insert_logo (ax)
+    draw_vector_labels (0.05,0.95, ax, decos)
     return fig

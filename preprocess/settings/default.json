@@ -13,17 +13,17 @@
 	"augment" : ["goal_taken", "goal_scored", "this_goals_per90", "opponent_goals_per90",
 		     "this_assists_per90", "opponent_assists_per90", "this_goals_pens_per90",
 		     "opponent_goals_pens_per90", "total_shots_made", "total_shots_taken",
-		     "total_fouls_made", "total_fouls_taken"],
+		     "total_shots_on_target_made", "total_shots_on_target_taken", "total_fouls_made", "total_fouls_taken"],
 	"std" : ["Autogoal", "Goal", "Tiri", "Falli_commessi", "Tiri_in_porta",
 		 "Falli_subiti", "Fuorigioco","goal_taken", "goal_scored",
 		 "this_goals_per90", "opponent_goals_per90", "this_goals_pens_per90",
 		 "opponent_goals_pens_per90",  "this_assistss_per90",
 		 "opponent_assists_per90", "total_shots_made", "total_shots_taken",
-		 "total_fouls_made", "total_fouls_taken"],
+		 "total_fouls_made", "total_fouls_taken", "total_shots_on_target_made", "total_shots_on_target_taken"],
 	"linear" : ["Minuti_giocati", "Cartellini_gialli", "Cartellini_rossi"],
 	
 	"clean" : ["Squadra", "home", "away", "goal_home", "goal_away",
-		   "goals_per90","assists_per90", "goals_pens_per90",
-		   "goals_per90_away","assists_per90_away", "goals_pens_per90_away"  ]
+		   "goals_per90","assists_per90", "goals_pens_per90", "other_team",
+		   "goals_per90_away","assists_per90_away", "goals_pens_per90_away", "Minuti_giocati"  ]
     }
 }

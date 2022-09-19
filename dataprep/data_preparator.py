@@ -62,7 +62,7 @@ class data_preparator ():
                 else:
                     for stat in summed[player_name]:
                         if stat in ['Ruolo','Squadra','Maglia']: continue
-                        summed[player_name][stat] += curr_players [player_name][stat]
+                        summed[player_name][stat] = float(summed[player_name][stat]) + float(curr_players [player_name][stat])
 
         return summed
 

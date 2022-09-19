@@ -153,10 +153,11 @@ class preprocessor ():
 
         # role transformer
         if 'Ruolo' in self.get_cols():
-            step_role = 10
+            step_role = 1
             ds = ds.replace ("Attaccante", 3*step_role).replace ("Centrocampista", 2*step_role).replace ("Difensore", 1*step_role).replace ("Portiere", 0*step_role)
             self.logger.print_debug ("   role transformer (A : %d, C : %d, D : %d, P : %d)" % (3*step_role, 2*step_role, 1*step_role, 0*step_role))
 
+           
         # clean
         if 'clean' in self.configuration['transformer']:
             list_to_clean = self.configuration['transformer']['clean']

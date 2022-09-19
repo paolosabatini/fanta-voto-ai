@@ -25,7 +25,20 @@ def init_input_for_analysis ( analysis ):
         analysis.model [ "model_" + str(i_mod)] = pd.read_pickle(pkl_file)
 
     return True
-        
+
+def init_input_for_df_analysis ( analysis ):
+    if not analysis: return False
+    
+    analysis.df = {}
+    analysis.model = {}
+
+    pkl_file= "%s/df.pkl" % (analysis.input_folder)
+    analysis.logger.print_debug ("   \tget input dataset:\t %s" % pkl_file)
+    analysis.df ['X'] = pd.read_pickle(pkl_file)
+
+    return True
+
+
 def get_list_of_datasets ( analysis ):
     reference_name = 'X_train'
     wildcard = "%s/%s_*.pkl" % (analysis.input_folder, reference_name)
@@ -63,6 +76,6 @@ def encode_position (pos):
     step = 10
     if pos == 'G' or pos == 'P': return 0 
     if pos == 'D': return step 
-    if pos == 'C' or pos == 'M': return 1*step 
-    if pos == 'A' or pos == 'F': return 2*step 
+    if pos == 'C' or pos == 'M': return 2*step 
+    if pos == 'A' or pos == 'F': return 3*step 
     return 'UNKNOWN'
