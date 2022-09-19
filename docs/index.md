@@ -19,7 +19,7 @@ The list of models with performance are documented by clicking the model trainin
 
 This step consists in retrieving the information available on the web - _for free_ - and processing it as input to the machine learning algorithm.
 
-<button name="button">Discover the data!</button>
+<button name="button" href="data_handling.md">Discover the data!</button>
 
 ### Models
 
