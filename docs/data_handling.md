@@ -16,8 +16,9 @@ This process consists of two steps: retrieving open source data and store them i
 ---
 
 <a name="preparation"></a>
-Preparation
------------
+
+## Preparation
+
 
 Three sources of open-access data are available, however they are very limited and contain limited information on players, teams and matches. References are the following:
 
@@ -82,8 +83,7 @@ In general, the higher mark is observed the more shots are made. The variance of
 The higher the goal efficiency, the higher the mark tend to be: it indicates that the player sticks out, as not many offensive chances are created by the team. The activity could be (weakly) parametrized by the number of shots made: the more active the player is the higher the mark results. For the offensive players as well, many features are missing, for example, the number of expected goal (xG), as well as offensive pass, touches in the opponent goal areas etc.. may be interesting features to correctly evaluate the forwards.
 
 <a name="pre-processing"></a>
-Pre-processing
---------------
+## Pre-processing
 
 This step prepares the data recorded into `json` files as inputs for the models to be trained. The pre-processing consists in several steps:
 - _Connection_ : for each matchday, informations from different `json` are connected to create a dataset indexed by the players. Individual features are connected to team and match information, such as match fixtures and stats or average team performances. The target mark (vote) is also associated to each player.
