@@ -20,8 +20,8 @@ Since we have already a limited statistics of the training sample, we _must_ opt
 The following figures show the performances of the model as correlation plot of the target and predicted marks and the residuals distributions.
 
 <p align="center">
-<img width="300" src="img/KNEIG/test_y_vs_pred.png">
-<img width="300" src="img/KNEIG/test_res_vs_role.png"><br>
+<img width="300" src="img/KNEIGH/test_y_vs_pred.png">
+<img width="300" src="img/KNEIGH/test_res_vs_role.png"><br>
 <em>  Left: correlation plot of the target mark vs. the predicted mark. Right: residual <br> distribution for each role, goalkeeper (G), defender (D), mids (M) and forwards (F) </em></p>
 
 Too bad, variance is very large, meaning that the distances do not really catch the correlations, but tend to give score quite centered around the most probable value. Also the variance is not dependent on the position on the pitch, meaning that the prediction seem to catch the overall trends of each player role, but still the variance is quite large.
@@ -31,9 +31,9 @@ Too bad, variance is very large, meaning that the distances do not really catch 
 To separate further the estimation for each role, we could increase the step for the position encoding in the training. However, not a bit change is observed, and counter-intuitively improves with smaller steps. This is probably due to the limited number of points and a bit better averaging by using "closer" positions.
 
 <p align="center">
-<img width="300" src="img/KNEIG/test_y_vs_pred_pos1.png">
-<img width="300" src="img/KNEIG/test_y_vs_pred.png">
-<img width="300" src="img/KNEIG/test_y_vs_pred_pos100.png"><br>
+<img width="250" src="img/KNEIGH/test_res_vs_role_pos1.png">
+<img width="250" src="img/KNEIGH/test_res_vs_role.png">
+<img width="250" src="img/KNEIGH/test_res_vs_role_pos100.png"><br>
 <em>  Distribution for each role, goalkeeper (G), defender (D), mids (M) and forwards (F) for a <br> step for position association of 1 (left), 10 (center, default) and 100 (right)</em></p>
 
 
