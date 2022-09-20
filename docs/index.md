@@ -23,6 +23,21 @@ This step consists in retrieving the information available on the web - _for fre
 
 ### Models
 
-Several models have been tested for this analysis, starting from the easiest ones to the more complex. All the models tested, with the corresponding performance studies, are documented in the link below.
+Several models have been tested for this analysis, starting from the easiest ones to more complex algorithms.
+
+The goal is to reproduce the marks (votes) assigned by FantaWomen staff to players every matchweek, being half-integers from 0 to 10 (but effectively from 3 to 9). The main limitations of the predictions come poor information in dataset available: a reduced set of individual features for each players are open-access, a bit more of an insight in the available informations and desiderata are in [data handling section](data_handling.md).
+
+On the other hand, a very limited set of values are asked to be predicted and a granularity of half-vote is required. Therefore, even the limited prediction may do the job. The goal is an accuracy over the mark spectrum less then half-vote. This is evaluated by requiring for each possible mark as the standard deviation of the residual distribution of the predicted vote with respect to the expected one. Possible biases may be calibrated out, in case they are significant.
+
+All the models tested, with the corresponding performance studies, are documented in the link below.
 
 - [K-neighbours regressor](kneigh_kf5.md): easiest model, and not machine learning at all. Just a sort-of look-up table from the available dataset in input.
+
+
+### Ideas
+
+A collection of ideas that may help in the future, in case the available information improve or in general to enhance the performances.
+
+- [ ] __Clustering__ : we could try to identify various typologies of players by clustering algorithms. This could be used to produce subsets for the trainings. This technique could help a lot in both cases individual player features available are enhanced or not.
+  - _Poor_: still this could be used to differentiate offensive / defensive players, since defensive (offensive) player will systematically gets higher vote in defensive (offensive) played matches with good result.
+  - _Enhanced_: it may even help in the classification of sub-positions, such as: central defender, lateral defender, playmaker, stopper, mid-wing, wing, central forward, second forward, number 10. It could be done manually, but this would be automathic and catch change in players attitude over time.
