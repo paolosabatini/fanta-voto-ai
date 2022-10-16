@@ -39,9 +39,8 @@ class trainer ():
             self.init_train_test ()
 
     def init_model (self):
-        model_file = 'training/models/%s.py' % self.model
-        model_import_str = "import models.%s as mymodel" % (self.model)
-        exec (model_import_str)
+        from importlib import import_module 
+        mymodel = import_module ('.models.%s' % self.model, package = 'training')
         self.mdl = mymodel
 
         
@@ -53,6 +52,7 @@ class trainer ():
         # init X, y
         target = 'Punteggio'
         features = [x for x in self.df['initial'].columns.tolist() if x != target]
+
         # Some final touches: set indices as int and remove names
         self.df ['X'] = self.df ["initial"] [ features ].reset_index ().drop(["index"], axis =1) 
         self.df ['y'] = self.df ["initial"] [ target ].reset_index ().drop(["index"], axis =1 )
@@ -84,6 +84,7 @@ class trainer ():
         
 
     def train (self):
+
         self.logger.print_info ("training..")
         n_training_sets = len (self.df['X_train'])
         self.trained_models = []
@@ -107,7 +108,7 @@ class trainer ():
             self.logger.print_info (" - model, test & train %d/%d" % (imodel+1, n_trained_models))
             
             model_pkl_name = "%s/%s_%d.pkl" % (path_for_thismodel, self.model, imodel)
-            pickle.dump (self.trained_models[imodel], open (model_pkl_name, 'w+'))
+            pickle.dump (self.trained_models[imodel], open (model_pkl_name, 'wb'))
             self.logger.print_debug ("   saved model to %s" % (model_pkl_name))
             
             for ds_name in ['X_train', 'y_train', 'X_test', 'y_test']:

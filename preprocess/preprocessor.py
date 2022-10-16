@@ -95,13 +95,14 @@ class preprocessor ():
                 orient = 'index' if ds in ['players','votes'] else 'records'
                 self.pandas [md] [ds] = pd.read_json (dsname, orient = orient)
                 
-                
+        
     def connect_and_select ( self, ds_to_connect = {} ):
         
         if 'votes' in ds_to_connect.keys():
             ds_merged = ds_to_connect['votes']
             
         if 'players' in ds_to_connect.keys():
+        
             ds_merged = pd.merge ( left = ds_merged,
                                    right = ds_to_connect['players'],
                                    on = "Squadra",
@@ -116,6 +117,10 @@ class preprocessor ():
             ds_merged = ds_merged.reset_index().merge (  ds_to_connect['performance'], left_on = "home",right_on = "team").set_index('index')
             ds_merged = ds_merged.reset_index().merge (  ds_to_connect['performance'], left_on = "away",right_on = "team", suffixes = ['','_away']).set_index('index')
 
+
+
+        # in case of nam: remove them
+        ds_merged = ds_merged.dropna ()
         return ds_merged [ self.get_cols() ] 
 
 
@@ -153,7 +158,7 @@ class preprocessor ():
 
         # role transformer
         if 'Ruolo' in self.get_cols():
-            step_role = 1
+            step_role = 10
             ds = ds.replace ("Attaccante", 3*step_role).replace ("Centrocampista", 2*step_role).replace ("Difensore", 1*step_role).replace ("Portiere", 0*step_role)
             self.logger.print_debug ("   role transformer (A : %d, C : %d, D : %d, P : %d)" % (3*step_role, 2*step_role, 1*step_role, 0*step_role))
 
