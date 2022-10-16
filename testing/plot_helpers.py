@@ -184,7 +184,7 @@ def hist_per_classes (df, classification = None, variable = '', nbins = 20, inte
     from analysis_helpers import encode_position
 
     fig, ax = plt.subplots()
-    values = df [variable]
+    if variable: values = df [variable]
     if classification == 'position':
         from mycolorpy import colorlist as mcp
         colors = mcp.gen_color(cmap="Set2", n=8)
@@ -195,6 +195,22 @@ def hist_per_classes (df, classification = None, variable = '', nbins = 20, inte
         plt.hist ( df [variable] [df ['Ruolo'] == encode_position ('F')].to_numpy(), mybins, facecolor = colors[-2], edgecolor = colors[-2], alpha = 0.5, density = True , label = 'Forward')
         
         ax.legend()
+    elif classification == 'pred_vs_meas':
+        from mycolorpy import colorlist as mcp
+        colors = mcp.gen_color(cmap="Set2", n=8)
+        mybins = np.linspace (-0.25,10.75, num=23)
+        plt.hist ( df ['target'].to_numpy(), mybins, color = colors[0], alpha = 0.5, density = False, label = 'Measured')
+        # df ['prediction'].plot (kind='bar',  mybins, color = None, yerr= , alpha = 1.0, density = True, label = 'Predicted')
+        import pandas as pd
+        df ['prediction_bin'] = pd.cut (df ['prediction'], mybins, labels = mybins[:-1]+0.25) 
+        pred_hist_entries = df.groupby ( by = 'prediction_bin').size()
+        pred_hist_err = pred_hist_entries**0.5
+        print 
+        plt.errorbar ( x = pred_hist_entries.index, y = pred_hist_entries.values, yerr = pred_hist_err.values, label = 'Predicted',
+                       fmt = 'o')
+        
+        ax.legend()
+        
     elif not classification:
         from mycolorpy import colorlist as mcp
         colors = mcp.gen_color(cmap="Set2", n=8)
@@ -208,4 +224,28 @@ def hist_per_classes (df, classification = None, variable = '', nbins = 20, inte
 
     insert_logo (ax)
     draw_vector_labels (0.05,0.95, ax, decos)
+    return fig
+
+
+
+def compare_prediction_and_target ( x, y1, y2, xaxislabel = None, yaxislabel = None, y1label = None, y2label = None, xlim = None, ylim = None, decos = [] ):
+
+    fig, ax = plt.subplots()
+    line1, = ax.plot (x,y1)
+    if y1label: line1.set_label (y1label)
+    line2, = ax.plot (x,y2)
+    if y2label: line2.set_label (y2label)
+ 
+    if xaxislabel: ax.set_xlabel(xaxislabel, fontsize=10)
+    if yaxislabel: ax.set_ylabel(yaxislabel, fontsize=10)
+    if xlim: plt.xlim (xlim[0], xlim[-1])
+    if ylim: plt.ylim (ylim[0], ylim[-1])
+
+    
+    
+    insert_logo (ax)
+    draw_vector_labels (0.05,0.95, ax, decos)
+
+    if (y1label or y2label): ax.legend()
+    
     return fig

@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bAin/env python
 
-from plot_helpers import correlation_plot, residual_vs_var_plot
+from plot_helpers import correlation_plot, residual_vs_var_plot, compare_prediction_and_target, hist_per_classes
 from utils.myprint import myprint
 import pandas as pd
 import numpy as np
@@ -58,6 +58,8 @@ class simple ():
         arrays ['pred_train'] = np.concatenate ( [ self.df['X_train_%d' % imod]['prediction'] for imod in range (n_models) ], axis=0)
         arrays ['pred_test'] = np.concatenate ( [ self.df['X_test_%d' % imod]['prediction'] for imod in range (n_models) ], axis=0)
         
+
+       
         self.logger.print_debug ("   correlation plot y/prediction corr.")
         self.plots ['test_y_vs_pred'] = correlation_plot (
             xarray = arrays ['y_test'], yarray = arrays ['pred_test'],
@@ -80,6 +82,7 @@ class simple ():
                 np.concatenate ([ self.df['X_test_%d' % imod].loc [ self.df['X_test_%d' % imod]['Ruolo'] == encode_position(pos) ] ['residual'] for imod in range (n_models) ])
             )
 
+            
         self.plots ['test_res_vs_role'] = residual_vs_var_plot (
             data = all_data, labels =  ['G', 'D', 'M', 'F'],
             xlabel = 'Position', ylabel = 'Residual (predicted - target) vote',
@@ -88,8 +91,54 @@ class simple ():
             
         )
         
+        
+        self.logger.print_debug ("   prediction & target vs events")
+        all_data = {} 
+        all_data ['prediction'] = np.concatenate ([ self.df['X_test_%d' % imod].sort_values( by = 'target') ['prediction'] for imod in range (n_models) ])
+        all_data ['target'] = np.concatenate ([ self.df['X_test_%d' % imod].sort_values( by = 'target') ['target'] for imod in range (n_models) ])
+        all_data ['index'] = np.concatenate ([ self.df['X_test_%d' % imod].sort_values( by = 'target').index for imod in range (n_models) ])
+        all_data ['fake_index'] = np.arange ( all_data ['target'].size )
+        self.plots ['test_pred_and_tar_per_event'] = compare_prediction_and_target (
+            y1 = all_data ['target'],
+            y2 = all_data ['prediction'],
+            x = all_data ['fake_index'],
+            xaxislabel = 'Raw player index', yaxislabel = 'Vote',
+            ylim = [3,10],
+            y1label = 'Measured', y2label = 'Predicted',
+            decos = ['Test dataset']
+        )
 
 
+        for pos in ['G', 'D', 'M', 'F']:
+            self.logger.print_debug ("     > Position: %s "% pos)
+            all_data = {} 
+            all_data ['prediction'] = np.concatenate ([ self.df['X_test_%d' % imod].loc [ self.df['X_test_%d' % imod]['Ruolo'] == encode_position(pos) ].sort_values( by = 'target') ['prediction'] for imod in range (n_models) ])
+            all_data ['target'] = np.concatenate ([ self.df['X_test_%d' % imod].loc [ self.df['X_test_%d' % imod]['Ruolo'] == encode_position(pos) ].sort_values( by = 'target') ['target'] for imod in range (n_models) ])
+            all_data ['index'] = np.concatenate ([ self.df['X_test_%d' % imod].loc [ self.df['X_test_%d' % imod]['Ruolo'] == encode_position(pos) ].sort_values( by = 'target').index for imod in range (n_models) ])
+            all_data ['fake_index'] = np.arange ( all_data ['target'].size )
+            self.plots ['test_pred_and_tar_per_event__%s' % pos] = compare_prediction_and_target (
+                y1 = all_data ['target'],
+                y2 = all_data ['prediction'],
+                x = all_data ['fake_index'],
+                xaxislabel = 'Raw player index', yaxislabel = 'Vote',
+                ylim = [3,10],
+                y1label = 'Measured', y2label = 'Predicted',
+                decos = ['Test dataset', 'Position: %s' % pos]
+        )
+
+
+        self.logger.print_debug ("   votes distribution (meas. vs. pred.)")
+        
+        
+        self.plots ['test_votes_hist_pred_and_tar'] = hist_per_classes (
+            df = pd.concat ( [ self.df['X_test_%d' % imod] for imod in range (n_models) ] ),
+            classification = 'pred_vs_meas',
+            xlim = [3,10],
+            integer = False,
+            xaxislabel = 'Voto',
+            yaxislabel = 'Fraction of players'
+        )
+        
 
 
 

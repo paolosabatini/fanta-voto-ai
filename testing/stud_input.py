@@ -73,20 +73,20 @@ class stud_input ():
                                                                         xlim = [-0.5,+5.5], ylim = [0,10],
                                                                         do_legend = False)
 
-        # goalkeeper variable study
-        self.input_variables_for_goalkeeper ()
+        # # goalkeeper variable study
+        # self.input_variables_for_goalkeeper ()
 
-        # defender variable study
-        self.input_variables_for_defender ()
+        # # defender variable study
+        # self.input_variables_for_defender ()
 
         # midfielder variable study
-        self.input_variables_for_midfielder ()
+        # self.input_variables_for_midfielder ()
 
-        # forward variable study
+        # # forward variable study
         self.input_variables_for_forward ()
 
         # general 1D distributions
-        self.input_variables_unidimentional ()
+        # self.input_variables_unidimentional ()
 
 
     def input_variables_unidimentional (self):
@@ -354,7 +354,25 @@ class stud_input ():
                                                                                        decos = ['Dataset: Goalkeepers'],
                                                                                        do_fit = False,
                                                                                        do_legend = False)
-        
+
+        # vote vs. goal taken / shot_on_target_taken (P)
+        self.logger.print_debug ("   votes vs. goals taken / shot_on_target_taken \t (P)")
+        votes_vs_goal_taken_o_shots_on_target_P = [
+            
+            self.df['X'].loc [ (self.df['X']['Ruolo'] == encode_position('P')) & (self.df['X'] ['total_shots_on_target_taken']<6) ] [['Punteggio','goal_over_shots_on_target']].sort_values (by = "goal_over_shots_on_target") ,
+            self.df['X'].loc [ (self.df['X']['Ruolo'] == encode_position('P')) & (self.df['X'] ['total_shots_on_target_taken']>=6) ] [['Punteggio','goal_over_shots_on_target']].sort_values (by = "goal_over_shots_on_target") 
+        ]
+        self.plots ['votes_vs_goal_over_shots_on_target_2_P'] = scat_plot_diff_classes ( votes_vs_goal_taken_o_shots_on_target_P,
+                                                                                       [r'Shots on target $\leq$ 5',r'Shots on target > 5'],
+                                                                                       xlabel = 'goal_over_shots_on_target',
+                                                                                       ylabel = 'Punteggio',
+                                                                                       xaxislabel = 'Goals / Shot on target taken',
+                                                                                       yaxislabel = 'Vote',
+                                                                                       xlim = [-0.2,1.2], ylim = [2,10],
+                                                                                       decos = ['Dataset: Goalkeepers'],
+                                                                                       do_fit = False,
+                                                                                        do_legend = True)
+
         # vote vs. goal taken - opponent_goal_per90 (P)
         self.logger.print_debug ("   votes vs. goals taken - opponent_goal_per90 \t (P)")
         votes_vs_goal_taken_sub_opponent_goals_avg_P = []
