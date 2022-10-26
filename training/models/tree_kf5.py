@@ -12,5 +12,5 @@ def get ():
 def train ( X, y):
     model= get()
     model.fit (X,y)
-    return model
+    return model, None
     

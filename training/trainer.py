@@ -5,9 +5,10 @@ import pandas as pd
 
 class trainer ():
 
-    def __init__ (self, debug, model, input, xvalidation):
+    def __init__ (self, debug, model, model_settings, input, xvalidation):
         self.debug = debug
         self.model = model
+        self.model_settings = model_settings
         self.input = input
         self.xvalidation = xvalidation
         self.init ()
@@ -39,10 +40,13 @@ class trainer ():
             self.init_train_test ()
 
     def init_model (self):
+        
         from importlib import import_module 
         mymodel = import_module ('.models.%s' % self.model, package = 'training')
         self.mdl = mymodel
 
+        self.logger.print_debug ("  \tsettings: %s" % self.model_settings.replace (":","="))
+        
         
     def init_input (self):
         pkl_file = "pkl/%s/df/df.pkl" % self.input
@@ -88,9 +92,17 @@ class trainer ():
         self.logger.print_info ("training..")
         n_training_sets = len (self.df['X_train'])
         self.trained_models = []
+        self.trained_model_histories = []
         for itrain in range (n_training_sets):
             self.logger.print_info (" - set %d/%d" % (itrain+1, n_training_sets))
-            self.trained_models.append (self.mdl.train ( self.df['X_train'][itrain], self.df['y_train'][itrain] ))
+            if 'tfnn' in self.model:
+                thismodel, thishistory = self.mdl.train ( self.df['X_train'][itrain], self.df['y_train'][itrain],
+                                                          model_settings = self.model_settings,
+                                                          X_test = self.df['X_test'][itrain], y_test = self.df['y_test'][itrain] )
+            else:
+                thismodel, thishistory = self.mdl.train ( self.df['X_train'][itrain], self.df['y_train'][itrain], self.model_settings)
+            self.trained_models.append (thismodel)
+            self.trained_model_histories.append (thishistory)
         self.logger.print_info ("\t..done.")
         
     def save (self, label):
@@ -105,11 +117,16 @@ class trainer ():
         self.logger.print_info ("saving the trained model in %s" % path_for_thismodel)
 
         for imodel in range (n_trained_models):
-            self.logger.print_info (" - model, test & train %d/%d" % (imodel+1, n_trained_models))
+            self.logger.print_info (" - model (with history), test & train %d/%d" % (imodel+1, n_trained_models))
             
             model_pkl_name = "%s/%s_%d.pkl" % (path_for_thismodel, self.model, imodel)
             pickle.dump (self.trained_models[imodel], open (model_pkl_name, 'wb'))
             self.logger.print_debug ("   saved model to %s" % (model_pkl_name))
+
+            history_pkl_name = "%s/history_%d.pkl" % (path_for_thismodel, imodel)
+            if self.trained_model_histories [imodel]:
+                pickle.dump ( self.trained_model_histories [imodel],  open (history_pkl_name, 'wb'))
+                self.logger.print_debug ("   saved history to %s" % (history_pkl_name))
             
             for ds_name in ['X_train', 'y_train', 'X_test', 'y_test']:
                 df_pkl_name = "%s/%s_%d.pkl" % (path_for_thismodel, ds_name, imodel)

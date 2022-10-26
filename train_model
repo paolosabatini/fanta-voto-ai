@@ -12,6 +12,7 @@ def main ():
     config = opt_parser()
     debug = config.debug
     model = config.model
+    model_settings = config.model_settings
     inputlabel = config.input
     xvalidation = config.validation
     outputlabel = config.label
@@ -21,9 +22,10 @@ def main ():
 
     # training manager class
     trn = trainer ( debug = debug,
-                      model = model,
-                      input = inputlabel,
-                      xvalidation = xvalidation)
+                    model = model,
+                    model_settings = model_settings,
+                    input = inputlabel,
+                    xvalidation = xvalidation)
 
     # train the model
     trn.train ()
@@ -42,6 +44,7 @@ def opt_parser ():
     parser = OptionParser()
     parser.add_option("-d","--debug", dest="debug", action="store_true", help="Switch on the debug", default = False)
     parser.add_option("-m","--model", dest="model",  help="Model to train", default = None)
+    parser.add_option("-s","--settings", dest="model_settings",  help="Settings for the model passed as OPT1:VAL1,OPT2:VAL", default = None)
     parser.add_option("-i","--input", dest="input",  help="Label of the input files", default = 'v1')
     parser.add_option("-l","--label", dest="label",  help="Label for the output model", default = 'test')
     parser.add_option("-v","--validation", dest="validation",  help="Cross-validation to use", default = None)

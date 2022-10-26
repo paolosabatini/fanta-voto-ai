@@ -22,5 +22,5 @@ def get ():
 def train ( X, y):
     model= get()
     model.fit (X,ravel (y)) # warinng about the format
-    return model
+    return model, None
     
