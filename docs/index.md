@@ -32,6 +32,9 @@ On the other hand, a very limited set of values are asked to be predicted and a 
 All the models tested, with the corresponding performance studies, are documented in the link below.
 
 - [K-neighbours regressor](kneigh_kf5.md): easiest model, and not machine learning at all. Just a sort-of look-up table from the available dataset in input.
+- [Decision tree regressor](tree_kf5.md): sligthly more complicated model, made of sequential hierarchical decision to categorize the input events and extract the most typical value for the category.
+- [Gradient boosted decision tree regressor](gbdt_kf5.md): a gradient-boosted sequence of decision trees to learn increasingly finer structure of the data.
+- [Neural Network](tfnn.md): a neural network model, to challenge the performance of the gradient boosted decision tree.
 
 
 ### Ideas
