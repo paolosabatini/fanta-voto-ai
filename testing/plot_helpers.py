@@ -2,13 +2,9 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
+from mycolorpy import colorlist as mcp
 import math
 
-# def set_style ():
-
-#     sns.color_palette("pastel")
-#     sns.set_theme()
 
 def insert_logo (ax):
     xmin, xmax = ax.get_xlim()
@@ -181,7 +177,7 @@ def get_bins_on_this_column (col, nbins = 20, integer = False):
     return np.linspace(xmin, xmax, nbins)
 
 def hist_per_classes (df, classification = None, variable = '', nbins = 20, integer = False, xaxislabel=None, yaxislabel=None, xlim=None, ylim=None, decos = []):
-    from analysis_helpers import encode_position
+    from .analysis_helpers import encode_position
 
     fig, ax = plt.subplots()
     if variable: values = df [variable]
@@ -248,4 +244,81 @@ def compare_prediction_and_target ( x, y1, y2, xaxislabel = None, yaxislabel = N
 
     if (y1label or y2label): ax.legend()
     
+    return fig
+
+
+
+def plot_loss ( histories ):
+    n_histories = len (histories.keys())
+    
+    fig, ax = plt.subplots()
+    for i in range (0, n_histories):
+        line = plt.plot ( histories[str(i)].history ['loss'], label = 'Train fold %d' % i)
+        plt.plot ( histories[str(i)].history ['val_loss'], color = line[-1].get_color (), linestyle = 'dotted',label = 'Test fold %d' % i)
+
+
+    plt.xlabel ('Epoch')
+    plt.ylabel ('Mean absolute error (loss)')
+    ax.legend()
+    insert_logo (ax)
+    
+    return fig
+
+
+
+def plot_permutation_feature_importance ( models, data ):
+    from sklearn.inspection import permutation_importance
+    from .analysis_helpers import shape_df_for_predicting
+
+    n_models = len (models.keys())
+    nreps, njobs = 20, 2
+
+    result = permutation_importance (
+        models ['model_0'], shape_df_for_predicting (data['X_test_0']),
+        data ['y_test_0'],
+        n_repeats = nreps, random_state=42, n_jobs = njobs,
+        scoring = ['neg_mean_absolute_error']
+    )
+
+
+    sorted_idx = result['neg_mean_absolute_error']['importances_mean'].argsort()
+
+    colors =  mcp.gen_color(cmap="Accent_r",n=n_models) # ['pink', 'orange', 'red', 'yellow', 'green']
+    bplots = []
+    
+    fig, ax = plt.subplots()
+    
+    bplots.append ( plt.boxplot(
+        result['neg_mean_absolute_error']['importances'][sorted_idx].T,
+        vert=False,whis = 0,
+        labels=np.array(data['X_test_0'].columns.tolist())[sorted_idx],
+        showcaps=False, showfliers=False, showmeans=False,
+        boxprops = dict ( color = colors[0], alpha = 0.8 ),
+        medianprops = dict ( linewidth = 0 ),
+        patch_artist=True
+    ))
+    for patch in bplots [-1]['boxes']: patch.set_facecolor (colors[0])
+
+    for i in range (1, n_models):
+        result = permutation_importance (
+            models ['model_%d' % i], shape_df_for_predicting (data['X_test_%d' % i]),
+            data ['y_test_%d' % i],
+            n_repeats = nreps, random_state=42, n_jobs = njobs,
+            scoring = ['neg_mean_absolute_error']
+        )
+        
+        bplots.append ( plt.boxplot(
+            result['neg_mean_absolute_error']['importances'][sorted_idx].T,
+            vert=False, whis = 0,
+            labels=np.array(data['X_test_%d' % i].columns.tolist())[sorted_idx],
+            showcaps=False, showfliers=False, showmeans=False, boxprops = dict ( color = colors[i], alpha = 0.8 ),
+            medianprops = dict ( linewidth = 0 ),
+            patch_artist=True
+        ))
+        for patch in bplots [-1]['boxes']: patch.set_facecolor (colors[i])
+
+    ax.legend ( [ x['boxes'][0] for x in bplots], ['Training %d' % i for i in range (0, n_models)], loc = 'right')
+    ax.set_xlabel ("Feature permutation importance")
+    fig.tight_layout()
+    insert_logo (ax)
     return fig

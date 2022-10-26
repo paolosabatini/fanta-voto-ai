@@ -1,12 +1,12 @@
 #!/usr/bAin/env python
 
-from .plot_helpers import correlation_plot, residual_vs_var_plot, compare_prediction_and_target, hist_per_classes
+from .plot_helpers import plot_permutation_feature_importance, plot_loss, correlation_plot, residual_vs_var_plot, compare_prediction_and_target, hist_per_classes
 from utils.myprint import myprint
 import pandas as pd
 import numpy as np
 
 
-class simple ():
+class simple_tfnn ():
 
     plots = {}
     
@@ -17,7 +17,7 @@ class simple ():
         
     
     def init (self):
-        self.logger = myprint ("simple   ", self.debug)
+        self.logger = myprint ("simple-tfnn   ", self.debug)
         self.logger.print_info ("initializing..")
 
         self.logger.print_info (" - reading input from %s" % self.input_folder)
@@ -27,6 +27,14 @@ class simple ():
             self.logger.print_info ("   .. done")
         else:
             self.logger.print_error ("Failed reading the input files: EXIT")
+            exit (1)
+
+        self.logger.print_info (" - reading history from %s" % self.input_folder)
+        from .analysis_helpers import init_history_for_analysis
+        if init_history_for_analysis ( analysis = self):
+            self.logger.print_info ("   .. done")
+        else:
+            self.logger.print_error ("Failed reading the history files: EXIT")
             exit (1)
 
 
@@ -141,7 +149,21 @@ class simple ():
         
 
 
+        '''
+         Loss convergence plot
+        '''
+        self.plots ['loss_convergence'] = plot_loss (
+            histories = self.histories
+        )
 
+
+        '''
+         Feature importance plot
+        '''
+        self.plots ['permutation_ranking'] = plot_permutation_feature_importance (
+            models = self.model,
+            data = self.df
+        )
 
         
     def save ( self, output_label ):

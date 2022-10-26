@@ -26,6 +26,22 @@ def init_input_for_analysis ( analysis ):
 
     return True
 
+def init_history_for_analysis ( analysis ):
+    if not analysis: return False
+    
+    n_datasets = get_list_of_datasets ( analysis )
+    n_models = get_list_of_models ( analysis )
+    n_histories = get_list_of_histories ( analysis )
+    
+    analysis.histories = {}
+        
+    analysis.logger.print_debug ("   \tget history (%d)" % n_datasets)
+    for i_df in range (n_datasets):
+        pkl_file= "%s/history_%d.pkl" % (analysis.input_folder, i_df)
+        analysis.histories [str(i_df)] = pd.read_pickle(pkl_file)
+
+    return True
+
 def init_input_for_df_analysis ( analysis ):
     if not analysis: return False
     
@@ -45,6 +61,13 @@ def get_list_of_datasets ( analysis ):
     import glob
     return len ( glob.glob (wildcard) ) 
 
+
+def get_list_of_histories ( analysis ):
+    reference_name = 'history'
+    wildcard = "%s/%s_*.pkl" % (analysis.input_folder, reference_name)
+    import glob
+    return len ( glob.glob (wildcard) ) 
+
             
 
 def get_list_of_models ( analysis ):
@@ -53,7 +76,8 @@ def get_list_of_models ( analysis ):
     analysis.model_name = [ name for name in glob.glob ("%s/*_0.pkl" % analysis.input_folder) if name.split("/")[-1][:2] not in ['X_', 'y_'] ] [0].split ("/")[-1].replace ('_0.pkl','')
     wildcard = "%s/%s_*.pkl" % (analysis.input_folder, analysis.model_name)
     return (len (glob.glob (wildcard)))
-    
+
+
         
 
 def get_array_from_series (df_coll, col_name):
@@ -79,3 +103,12 @@ def encode_position (pos):
     if pos == 'C' or pos == 'M': return 2*step 
     if pos == 'A' or pos == 'F': return 3*step 
     return 'UNKNOWN'
+
+
+
+def shape_df_for_predicting (df):
+    features = df.columns.tolist()
+    to_be_removed = ['prediction', 'target', 'residual']
+    for feat in to_be_removed: features.remove (feat)
+    return df[features]
+

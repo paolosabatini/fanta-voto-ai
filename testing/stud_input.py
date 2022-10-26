@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from plot_helpers import box_vs_var_plot, correlation_plot, scat_plot_diff_classes, hist_per_classes
-from analysis_helpers import encode_position
+from .plot_helpers import box_vs_var_plot, correlation_plot, scat_plot_diff_classes, hist_per_classes
+from .analysis_helpers import encode_position
 from utils.myprint import myprint
 import pandas as pd
 import numpy as np
@@ -23,7 +23,7 @@ class stud_input ():
 
         self.logger.print_info (" - reading input DF from %s" % self.input_folder)
 
-        from analysis_helpers import init_input_for_df_analysis
+        from .analysis_helpers import init_input_for_df_analysis
         if init_input_for_df_analysis ( analysis = self):
             self.logger.print_info ("   .. done")
         else:
@@ -83,10 +83,38 @@ class stud_input ():
         # self.input_variables_for_midfielder ()
 
         # # forward variable study
-        self.input_variables_for_forward ()
+        # self.input_variables_for_forward ()
 
         # general 1D distributions
         # self.input_variables_unidimentional ()
+
+        # some debugging
+        self.some_printout_of_cases ()
+
+
+    def some_printout_of_cases (self):
+        '''
+         Some printout
+        '''
+        self.logger.print_info ("printing some cases")
+
+        self.logger.print_debug ("   forward not scoring in an easy match")
+        sel = (self.df['X']['Ruolo'] == 30) & (self.df['X']['Goal'] == 0) & (self.df['X']['this_goals_per90'] > 2) & (self.df['X']['opponent_goals_per90'] < 1)
+        cols = ['Punteggio','Goal', 'goal_scored', 'goal_taken', 'this_goals_per90', 'opponent_goals_per90', 'Tiri'] 
+        att = self.df['X'].loc[sel.values, cols]
+        print (att)
+
+        self.logger.print_debug ("   keepers getting same number of goals and similar shots on goal")
+        sel = (self.df['X']['Ruolo'] == 0) & (self.df['X']['goal_taken'] == 1) & (self.df['X']['total_shots_taken'] > 10)
+        cols = ['Punteggio','Goal', 'goal_scored', 'goal_taken', 'total_shots_taken', 'total_shots_on_target_taken'] 
+        tmp = self.df['X'].loc[sel.values, cols]
+        print (tmp)
+
+        self.logger.print_debug ("   defender keeping clean sheet in a exp. balanced match")
+        sel = (self.df['X']['Ruolo'] == 10) & ((self.df['X']['goal_taken']-self.df['X']['this_goals_per90'])<0 ) & ( self.df['X']['this_goals_per90']> 1 ) & ( self.df['X']['opponent_goals_per90']> 1 ) 
+        cols = ['Punteggio','Goal', 'goal_scored', 'goal_taken', 'total_shots_taken', 'total_shots_on_target_taken', 'Falli_commessi', 'opponent_goals_per90', 'this_goals_per90', 'Goal'] 
+        tmp = self.df['X'].loc[sel.values, cols]
+        print (tmp)
 
 
     def input_variables_unidimentional (self):

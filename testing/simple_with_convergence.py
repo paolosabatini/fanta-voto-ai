@@ -1,12 +1,15 @@
-#!/usr/bAin/env python
+#!/usr/bin/env python
 
 from .plot_helpers import correlation_plot, residual_vs_var_plot, compare_prediction_and_target, hist_per_classes
+from .analysis_helpers import shape_df_for_predicting
 from utils.myprint import myprint
 import pandas as pd
 import numpy as np
+from sklearn.inspection import permutation_importance
+from sklearn.metrics import mean_squared_error
 
 
-class simple ():
+class simple_with_convergence ():
 
     plots = {}
     
@@ -140,10 +143,73 @@ class simple ():
         )
         
 
+        self.logger.print_debug ("   loss convergence")
 
+        '''
+        let's implement it here at the moment
+        '''
+        imodel=0
+        params = {}
+        params [imodel] = self.model ['model_%d' % imodel].get_params ()
+        test_score = np.zeros((params [imodel] ["n_estimators"],), dtype=np.float64)
+        self.model ['model_%d' % imodel].staged_predict
+        for i, y_pred in enumerate(self.model ['model_%d' % imodel].staged_predict( shape_df_for_predicting (self.df['X_test_0']))):
+            
+            test_score[i] = self.model ['model_%d' % imodel].loss_(np.ravel(self.df['y_test_0']), y_pred)
 
+        import matplotlib.pyplot as plt
+        fig = plt.figure(figsize=(6, 6))
+        plt.subplot(1, 1, 1)
+        plt.plot(
+            np.arange(params[imodel]["n_estimators"]) + 1,
+            self.model ['model_%d' % imodel].train_score_,
+            "b-",
+            label="Training Set Deviance",
+        )
+        plt.plot(
+            np.arange(params[imodel]["n_estimators"]) + 1, test_score, "r-", label="Test Set Deviance"
+        )
+        plt.legend(loc="upper right")
+        plt.xlabel("Boosting Iterations")
+        plt.ylabel("Deviance")
+        fig.tight_layout()
+        self.plots ['test_loss_evolution'] = fig
 
+        '''
+        let's implement it here at the moment
+        '''
+        self.logger.print_debug ("   feature ranking (MDI)")
+        curr_model = self.model ['model_%d' % imodel]
         
+        feature_importance = curr_model.feature_importances_
+        sorted_idx = np.argsort(feature_importance)
+        pos = np.arange(sorted_idx.shape[0]) + 0.5
+        fig = plt.figure(figsize=(12, 6))
+        plt.subplot(1, 2, 1)
+        plt.barh(pos, feature_importance[sorted_idx], align="center")
+        plt.yticks(pos, np.array(self.df['X_test_0'].columns.tolist())[sorted_idx])
+        plt.title("Feature Importance (MDI)")
+
+
+        self.logger.print_debug ("   feature ranking (permutation)")
+        result = permutation_importance(
+            curr_model,
+            shape_df_for_predicting (self.df['X_test_0']),
+            self.df['y_test_0'],
+            n_repeats=10, random_state=42, n_jobs=2
+        )
+        sorted_idx = result.importances_mean.argsort()
+        plt.subplot(1, 2, 2)
+        plt.boxplot(
+            result.importances[sorted_idx].T,
+            vert=False,
+            labels=np.array(self.df['X_test_0'].columns.tolist())[sorted_idx],
+        )
+        plt.title("Permutation Importance (test set)")
+        fig.tight_layout()
+        self.plots ['test_feature_importance'] = fig
+
+
     def save ( self, output_label ):
 
         output_folder = 'output'

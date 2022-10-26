@@ -35,10 +35,10 @@ def main ():
             mp.print_error ("analysis '%s' not found: EXIT" % analysis_name)
             exit(1)
         else:
-            exec (analysis_import_cmd)
-
-
-        
+            from importlib import import_module 
+            analysis = getattr (import_module ('.%s' % analysis_name, package = '.testing'),
+                                analysis_name ) 
+       
     # analysis construction
     ana = analysis (debug = debug,
                     input_folder = input_folder)
