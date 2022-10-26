@@ -102,11 +102,14 @@ class preprocessor ():
             ds_merged = ds_to_connect['votes']
             
         if 'players' in ds_to_connect.keys():
+
         
             ds_merged = pd.merge ( left = ds_merged,
                                    right = ds_to_connect['players'],
-                                   on = "Squadra",
-                                   how= "left", left_index=True, right_index=True,) 
+                                   how= "left",
+                                   left_index=True, right_index=True)
+            ds_merged ['Squadra'] = ds_merged ['Squadra_x']
+            ds_merged = ds_merged.drop (['Squadra_x','Squadra_y'], axis=1)
             
         if 'fixtures' in ds_to_connect.keys():
             ds_home = ds_merged.reset_index().merge (  ds_to_connect['fixtures'],left_on = ["Squadra"], right_on = ["home"]).set_index('index')
@@ -134,7 +137,7 @@ class preprocessor ():
 
         # augment
         if 'augment' in self.configuration['transformer']:
-            import augmenter
+            import preprocess.augmenter as augmenter
             self.logger.print_debug ("   augmenting now:")
             
             for var_aug in  self.configuration['transformer']['augment']:
@@ -158,7 +161,7 @@ class preprocessor ():
 
         # role transformer
         if 'Ruolo' in self.get_cols():
-            step_role = 10
+            step_role = 1
             ds = ds.replace ("Attaccante", 3*step_role).replace ("Centrocampista", 2*step_role).replace ("Difensore", 1*step_role).replace ("Portiere", 0*step_role)
             self.logger.print_debug ("   role transformer (A : %d, C : %d, D : %d, P : %d)" % (3*step_role, 2*step_role, 1*step_role, 0*step_role))
 

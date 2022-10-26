@@ -24,7 +24,7 @@ def get_dict_of_teams (content, base_url=''):
 # get the stats of each player given the page content of a club
 def decode_these_players (content, team_name):
     from utils.converter import teamname2label, name2noutf8
-    from web_helpers import scrape_info
+    from dataprep.web_helpers import scrape_info
     list_of_player_texts = [ x.replace ('</tr>','') for x in content.split ('<tr>') if '</tr>' in x]
     dict_these_players = {}
     

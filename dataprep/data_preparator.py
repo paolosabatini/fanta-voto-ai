@@ -10,11 +10,11 @@
 """
 
 from utils.myprint import myprint
-from conf import  _WEB_STATS_PLAYERS_, _DATA_FOLDER_, _WEB_STATS_MATCHES_, _WEB_STATS_PERF_
-from conf import _SQL_CONNECTION_
-import web_helpers as webh 
-import figc_helpers as figch
-import fbref_helpers as fbrefh
+from .conf import  _WEB_STATS_PLAYERS_, _DATA_FOLDER_, _WEB_STATS_MATCHES_, _WEB_STATS_PERF_
+from .conf import _SQL_CONNECTION_
+import dataprep.web_helpers as webh 
+import dataprep.figc_helpers as figch
+import dataprep.fbref_helpers as fbrefh
 
 class data_preparator ():
 
@@ -38,7 +38,7 @@ class data_preparator ():
         dict_teams = figch.get_dict_of_teams (web_content)
 
         players = {}
-        for team_name, team_url in dict_teams.iteritems ():
+        for team_name, team_url in dict_teams.items ():
             self.logger.print_debug( "   from " + str(team_name) )
             team_complete_url = _WEB_STATS_PLAYERS_ + team_url
             players.update ( figch.decode_these_players ( webh.read_webpage(team_complete_url), team_name) )
@@ -106,7 +106,7 @@ class data_preparator ():
         
     # read and save the vote from db
     def read_votes (self):
-        import sql_helpers
+        import dataprep.sql_helpers as sql_helpers
         votes = sql_helpers.get_votes_per_matchday ( connection = _SQL_CONNECTION_,
                                                      matchday = self.matchday)
         self.logger.print_info ("Storing output to JSON ..")

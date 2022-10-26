@@ -6,7 +6,7 @@
  - decoding the performance from the standard stats page
 """
 
-from web_helpers import *
+from dataprep.web_helpers import *
 from utils.converter import *
 
 """
