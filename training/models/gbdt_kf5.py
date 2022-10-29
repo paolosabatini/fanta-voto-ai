@@ -19,7 +19,7 @@ def get ():
     return model
 
 
-def train ( X, y):
+def train ( X, y, model_settings = None):
     model= get()
     model.fit (X,ravel (y)) # warinng about the format
     return model, None

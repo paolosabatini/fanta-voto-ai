@@ -9,7 +9,7 @@ def get ():
     return model
 
 
-def train ( X, y):
+def train ( X, y, model_settings):
     model= get()
     model.fit (X,y)
     return model, None

@@ -1,4 +1,4 @@
-#!/usr/bAin/env python
+#!/usr/bin/env python
 
 from .plot_helpers import correlation_plot, residual_vs_var_plot, compare_prediction_and_target, hist_per_classes
 from utils.myprint import myprint

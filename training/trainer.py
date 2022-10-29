@@ -45,7 +45,7 @@ class trainer ():
         mymodel = import_module ('.models.%s' % self.model, package = 'training')
         self.mdl = mymodel
 
-        self.logger.print_debug ("  \tsettings: %s" % self.model_settings.replace (":","="))
+        self.logger.print_debug ("  \tsettings: %s" % '' if not self.model_settings else self.model_settings.replace (":","="))
         
         
     def init_input (self):

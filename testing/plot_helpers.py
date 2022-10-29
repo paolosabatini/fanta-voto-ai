@@ -322,3 +322,24 @@ def plot_permutation_feature_importance ( models, data ):
     fig.tight_layout()
     insert_logo (ax)
     return fig
+
+
+
+def plot_model_scheme (model, model_name = 'tree', features = None):
+
+    fig, ax = plt.subplots()
+    
+    if 'tree' in model_name :
+
+        from sklearn.tree import plot_tree
+        plot_tree (model, feature_names = features,
+                   filled = True, rounded = True,
+                   proportion = True, fontsize = 2.)
+        
+
+    if 'tfnn' in model_name :
+        from keras_visualizer import visualizer
+        visualizer(model, format='pdf', view=False)
+
+
+    return fig
