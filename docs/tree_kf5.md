@@ -9,7 +9,7 @@ The implementation of the model is [here](https://github.com/paolosabatini/fanta
 The decision tree consists of an automated human that takes recursive decisions on splitting the initial dataset in order to minimize a given metric, resulting in a _tree_ structure (see the figure below)
 
 <p align="center">
-<img width="500" src="img/TREE/MD4/scheme.pdf"><br>
+<img width="500" src="img/TREE/MD4/scheme.png"><br>
 <em> Scheme of one of the trained models, with a maximum depth of the tree set to 4.</em></p>
 
 In case of regression problems, this metric measures the deviance of the target values of the selected dataset from the mean target value of the dataset.
