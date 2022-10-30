@@ -49,7 +49,7 @@ Here below, the performance of the models at different `max_depth` values.
 <em>  Correlation of the predicted and measured mark on train sample with  `max_depth` set to 4 (left), 10 (center) and 50 (right). </em> <br><br>
 
 <img width="250" src="img/TREE/MD4/test_y_vs_pred.png">
-<img width="250" src="img/TREE/MD10/train_y_vs_pred.png">
+<img width="250" src="img/TREE/MD10/test_y_vs_pred.png">
 <img width="250" src="img/TREE/MD50/test_y_vs_pred.png"><br>
 <em>  Correlation of the predicted and measured mark on test sample with  `max_depth` set to 4 (left), 10 (center) and 50 (right). </em> <br>
 </p>
