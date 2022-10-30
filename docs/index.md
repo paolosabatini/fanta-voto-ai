@@ -31,10 +31,10 @@ On the other hand, a very limited set of values are asked to be predicted and a 
 
 All the models tested, with the corresponding performance studies, are documented in the images or the links below.
 
-[<img src="img/COVER/kNearestNeighbors.png" width="500" height="400">](kneigh_kf5.md)
-[<img src="img/COVER/DT.png" width="500" height="400">](tree_kf5.md) 
-[<img src="img/COVER/GBDT.jpg" width="500" height="400">](gbdt_kf5.md)
-[<img src="img/COVER/NN.png" width="500" height="400">](tfnn.md) 
+[<img src="img/COVER/kNearestNeighbors.png" width="400" height="350">](kneigh_kf5.md)
+[<img src="img/COVER/DT.png" width="400" height="350">](tree_kf5.md) 
+[<img src="img/COVER/GBDT.jpg" width="400" height="350">](gbdt_kf5.md)
+[<img src="img/COVER/NN.png" width="400" height="350">](tfnn.md) 
 
 - [K-neighbours regressor](kneigh_kf5.md): easiest model, and not machine learning at all. Just a sort-of look-up table from the available dataset in input.
 - [Decision tree regressor](tree_kf5.md): sligthly more complicated model, made of sequential hierarchical decision to categorize the input events and extract the most typical value for the category.
