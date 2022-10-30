@@ -29,13 +29,52 @@ The goal is to reproduce the marks (votes) assigned by FantaWomen staff to playe
 
 On the other hand, a very limited set of values are asked to be predicted and a granularity of half-vote is required. Therefore, even the limited prediction may do the job. The goal is an accuracy over the mark spectrum less then half-vote. This is evaluated by requiring for each possible mark as the standard deviation of the residual distribution of the predicted vote with respect to the expected one. Possible biases may be calibrated out, in case they are significant.
 
-All the models tested, with the corresponding performance studies, are documented in the link below.
+All the models tested, with the corresponding performance studies, are documented in the images or the links below.
+
+[<img src="img/COVER/kNearestNeighbors.png" width="500" height="400">](kneigh_kf5.md)
+[<img src="img/COVER/DT.png" width="500" height="400">](tree_kf5.md) 
+[<img src="img/COVER/GBDT.jpg" width="500" height="400">](gbdt_kf5.md)
+[<img src="img/COVER/NN.png" width="500" height="400">](tfnn.md) 
 
 - [K-neighbours regressor](kneigh_kf5.md): easiest model, and not machine learning at all. Just a sort-of look-up table from the available dataset in input.
 - [Decision tree regressor](tree_kf5.md): sligthly more complicated model, made of sequential hierarchical decision to categorize the input events and extract the most typical value for the category.
 - [Gradient boosted decision tree regressor](gbdt_kf5.md): a gradient-boosted sequence of decision trees to learn increasingly finer structure of the data.
 - [Neural Network](tfnn.md): a neural network model, to challenge the performance of the gradient boosted decision tree.
 
+### Preliminary conclusions
+
+All the models tested indicate that the **poor quality** (and statistics) of the **dataset** is the largest limitation to the model performances. 
+
+The most performing models suffer of large variance, even though no signs of overtraining appear. This is symptom of partial informationa available, that the model cannot reconstruct from the input features. 
+
+Let's have a look on the permutation ranking of the input features from the [neural network model](tfnn.md).
+
+<p align="center">
+<img width="400" src="img/COVER/permutation_ranking.png"><br></p>
+
+Firstly, note the variation of the ranking depending on the training set, a symptom of small statistics and features in the training set that are not in the testing sample.
+
+Looking at the plot, no many player-specific features rank high, therefore players in the same position and same number of goal scored (usually zero) would be rated with the same score. Is this true in reality? Here is a little example:
+
+<br>
+
+| Player | Team | Match result | Goal | Shoots | Goalx90 (JUV) |  Goalx90 (opponent) | Mark | 
+|:-----------:|:------------:|:-------------:|:----------------:|:----------------:|:----------------:|:----------------:|:----------------:|
+| A. Bonfantini   | Juventus |  3 - 0 | 0 | 0 | 2.80 | 0.8 | 6.0 |
+| B. Bonansea     | Juventus |  3 - 0 | 0 | 3 | 2.80 | 0.8 | 6.5 |
+| L. Beerensteyn  | Juventus |  3 - 0 | 0 | 3 | 2.80 | 0.8 | 4.5 |
+
+<br>
+
+All these players play in the same team, same position and the marks relate to the same matchday. They do not score any goal, despite the match was against a clearly weaker opponent, with a similar number of shots (that is still poorly ranked in the ranking plot). No yellow/red cards for all of them. Despite a similar performance in terms of numbers in the dataset, the evaluation is completely different, ranging over 2 points. This is an example of the lack of information that our dataset suffers, especially of offensive/defensive plays for each players, e.g.
+- Number of passes (succesful/unsuccessful)
+- Number of tackle/intercept (succesful/unsuccesful)
+- Number of specific offensive plays (touches in the box, verticality of passes, xA, xG)
+- Number of specific defensive plays (key tackle in the box, aerial balls wins, second balls wins)
+- Match information: ball possession, timing of goals..
+- Goalkeeper statistics (iterventions, high balls, passes, key passes, pxG)
+
+These features are keys to properly evaluate the performance of a player, hopefully organisations such as FBREF or StatsBomb will make public the data from this year soon - as they did for the English football league - so that we can better train our models. In the meantime, we will continue collecting data in the same format, and check whether more stats already help the performances.
 
 ### Ideas
 
