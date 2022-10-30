@@ -30,10 +30,10 @@ $$
 
 where $gamma_{\alpha} (x_i)$ is the output of the first decision tree trained to reproduce $r_{1,i}$, and $\nu$ is called _learning rate_ that parametrize the learning speed of the gradient boosting.
 Fantastic, this procedure can be repeated until corrections become negligible, meaning that we have minimized the loss!
-The final prediction after K trees is given by:
+The final prediction after $K$ trees is given by:
 
 $$
-  \hat{y}_K =  \gamma_0 (x_i) + \nu \sum_\alpha \gamma_\alpha (x_i)
+  \hat{y}_K =  \gamma_0 (x_i) + \nu \sum_{\alpha = 1}^{K} \gamma_\alpha (x_i)
 $$
 
 
