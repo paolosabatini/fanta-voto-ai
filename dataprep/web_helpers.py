@@ -42,3 +42,10 @@ def get_div ( web_content, div_id = '', div_type = '', extra_label = '' ):
             div_content += '%s\n' % l
             if '</%s>'%div_type in l: break
     return div_content
+
+
+"""
+ Get list of images in document
+"""
+def get_list_of_images (web_content):
+    return [l for l in web_content.split('\n') if "<img" in l and "src=" in l]

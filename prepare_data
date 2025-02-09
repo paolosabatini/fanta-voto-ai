@@ -15,6 +15,7 @@ def main ():
     nofixtures = config.nofixtures
     noperf = config.noperf
     novote = config.novote
+    use_fbref = config.fbref
     mp = myprint ("prepare_data", debug)
     mp.banner ( mp.bold + "Data Preparation" + mp.endc + mp.color_info + "\n Downloading data for a given matchday\nData is stored in the data/ folder")
     mp.print_info ("MATCHDAY %d: data preparation" % matchday)
@@ -22,7 +23,8 @@ def main ():
     # main class for prepare the download
     dp = data_preparator (
         matchday = matchday,
-        debug = debug
+        debug = debug,
+        use_fbref = use_fbref
     )
  
     # getting statistics for all the players
@@ -74,6 +76,7 @@ def opt_parser ():
     parser.add_option("--nofixtures", dest="nofixtures", action="store_true", help="Skip reading the fixtures for the matchday", default = False)
     parser.add_option("--noperf", dest="noperf", action="store_true", help="Skip reading the team performances", default = False)
     parser.add_option("--novote", dest="novote", action="store_true", help="Skip reading votes from FW db", default = False)
+    parser.add_option("--fbref", dest="fbref", action="store_true", help="Use FBREF to read player statistics", default = False)
     (config, sys.argv[1:]) = parser.parse_args(sys.argv[1:])
     return config
 

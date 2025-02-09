@@ -104,3 +104,6 @@ def name2noutf8 (name):
 
 
 
+def format_matchweek (matchweek):
+    from utils.globalvalues import is_regular_season, get_matches_in_regular_season
+    return matchweek if is_regular_season(matchweek) else matchweek-get_matches_in_regular_season()
