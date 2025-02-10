@@ -5,6 +5,41 @@ This version `v2` is not documented in the webpage, as under development and com
 
 ## Setting up
 
+### MySQL database local setup
+
+Install `mysql` service
+
+```shell
+# MacOS
+$ brew install mysql
+
+# Start the service (change with restart to restart)
+$ brew services start mysql
+
+# To check the running services
+$ brew services list
+```
+
+To access to the local database
+
+````shell
+mysql -u root -p
+```
+
+The setting up of the needed tables are in `config/db`. To set the database up:
+
+````shell
+cd ./config/db
+mysql -u root -p < create_database.sql
+mysql -u root -p < create_tables.sql
+
+# To load the players, setup the local_infile in server
+# mysql> SET GLOBAL local_infile=1
+mysql -u root -p --local-infile=1 < load_players_table.sql
+
+```
+
+### Pyhon setup
 Creation of the virtual environment
 
 ```shell
@@ -20,3 +55,12 @@ $ source .venv/bin/activate
 # de-activation
 $ deactivate
 ```
+
+Install the needed modules
+
+````shell
+$ pip install bs4
+$ pip install mysql-connector-python
+$ pip install unidecode
+```
+
