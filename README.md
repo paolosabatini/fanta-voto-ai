@@ -62,5 +62,7 @@ Install the needed modules
 $ pip install bs4
 $ pip install mysql-connector-python
 $ pip install unidecode
+$ pip install mysql-connector
+$ pip install mysqlclient 
 ```
 
