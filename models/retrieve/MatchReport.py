@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 
 import utils.html.HtmlRetriever as hr
 import utils.parser.PlayerStatsParser as psr
+from copy import deepcopy
 
 _base_host_url = "https://fbref.com/"
 
@@ -22,7 +23,7 @@ class MatchReport:
         self.home = home
         self.away = away
         self.url = _base_host_url + url
-    
+        
     def __str__ (self):
         return ("[G %d] %s\t-\t%s\t (%s)" %
                 (self.matchweek,
@@ -36,6 +37,8 @@ class MatchReport:
         parser = psr.PlayerStatsParser ()
         parser.set_url ( self.url )
         parser.execute()
-        self.stats = parser.get_stats()
-        self.errors = parser.get_errors()
+        self.stats = deepcopy(parser.get_stats())
+        self.errors = deepcopy(parser.get_errors())
+
+        parser.clear()
         

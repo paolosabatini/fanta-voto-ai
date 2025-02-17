@@ -29,9 +29,7 @@ class RetrieveService:
         [ match.retrieve_stats() for match in self.matches ]
 
         # flatten all errors
-        for match_report in self.matches:
-            self.errors += match_report.errors
-        print (self.errors)
+        self.errors  = [ match_report.errors for  match_report in self.matches ]
         
 
     def get_retrieved_stats(self):
@@ -43,5 +41,5 @@ class RetrieveService:
     def get_all_stats (self):
         return [ pl_stat for match_report in self.matches for pl_stat in match_report.stats ] 
 
-    def get_errors(self):
-        return self.errors
+    def get_all_errors(self):
+        return [ err for match_report in self.matches for err in match_report.errors ] 

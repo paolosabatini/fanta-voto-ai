@@ -48,7 +48,8 @@ class PlayerStatsParser:
         stat_tables = get_all_stats_tables ( bs4_html )
         for stat_table in stat_tables:
             self.stats += self.get_stat_from_table ( stat_table )
-
+            
+            
         gk_stat_tables = get_all_gk_stats_tables ( bs4_html )
         for stat_gk_table in gk_stat_tables:
             self.fill_gk_stats ( stat_gk_table )
@@ -60,9 +61,12 @@ class PlayerStatsParser:
             if is_table_row_to_be_skipped (irow, row): continue
             player_stats = ps.PlayerStats (row)
 
-            if not player_stats.find_id( ):
+            if not player_stats.find_id():
                 logging.error ("[ERROR] %s ID not found" % player_stats.name)
-                self.errors.append( ParserError ("ID_NOT_FOUND", "Player ID for  %s not found in Player table" % player_stats.name) ) 
+                self.errors.append( ParserError ("ID_NOT_FOUND", "Player ID for  %s not found in Player table" % player_stats.name) )
+                continue
+            else:
+                logging.debug("[DEBUG] Player %s -> ID %s" % (player_stats.name, player_stats.id))
             this_match_stats.append (player_stats)
         logging.info ("N. MatchReport stats: \t %d" % len (this_match_stats))
         return this_match_stats
@@ -77,9 +81,13 @@ class PlayerStatsParser:
                 logging.error ("[ERROR] %s Not found" % gk_name)
                 self.errors.append( ParserError ("GK_NOT_FOUND", "GK %s not found in PlayerStat table" % gk_name) )
 
-
+    def clear (self):
+        self.html = None
+        self.stats.clear()
+        self.errors.clear()
     
     def get_stats(self):
         return self.stats
+
     def get_errors(self):
         return self.errors

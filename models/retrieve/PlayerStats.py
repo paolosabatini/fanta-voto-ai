@@ -107,7 +107,7 @@ class PlayerStats:
         self.gk_launches_completed = get_stat_from_row(row, "gk_passes_completed_launched")
         self.gk_launches = get_stat_from_row(row, "gk_passes_launched")
         self.gk_passes = get_stat_from_row(row, "gk_passes")
-        self.gk_thows = get_stat_from_row(row, "gk_passes_throws")
+        self.gk_throws = get_stat_from_row(row, "gk_passes_throws")
         self.gk_avg_pass_length = get_stat_from_row(row, "gk_passes_length_avg")
         self.gk_crosses = get_stat_from_row(row, "gk_crosses")
         self.gk_crosses_stopped = get_stat_from_row(row, "gk_crosses_stopped")
@@ -125,5 +125,5 @@ class PlayerStats:
         if len (name_matches)>1:
             # More than one match: using the exact match
             name_matches = [ pl for pl in all_players if ( ( pl[-2].strip()+" "+pl[-1].strip() == self.name.strip()))]
-        self.id = name_matches[0][0]
+        self.id = int(name_matches[0][0])
         return True

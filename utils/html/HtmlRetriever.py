@@ -5,5 +5,9 @@ import urllib.request
 
 
 def get_html (url):
-    fp = urllib.request.urlopen(url)
-    return fp.read().decode("utf8")
+    try:
+        fp = urllib.request.urlopen(url)
+        return fp.read().decode("utf8")
+    except:
+        logging.error ("[ERROR] Connection refused at %s" % url)
+        exit(1)
