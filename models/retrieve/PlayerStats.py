@@ -1,4 +1,6 @@
 #!/usr/bAin/env python3
+import logging
+logger = logging.getLogger(__name__)
 
 import utils.singleton.PlayerListSingleton as pls
 from unidecode import unidecode
@@ -115,6 +117,15 @@ class PlayerStats:
         # self.gk_avg_distance_def_actions = get_stat_from_row(row, "gk_avg_distance_def_actions")
 
 
+    def has_valid_gk_stats (self):
+        all_gk_stats = ["gk_sota", "gk_ga", "gk_saves", "gk_psxg",
+                        "gk_launches_completed", "gk_launches", "gk_passes",
+                        "gk_throws", "gk_avg_pass_length", "gk_crosses",
+                        "gk_crosses", "gk_crosses_stopped", "gk_def_actions_outside_box"]
+        return self.gk_stats_filled \
+            and all ( hasattr (self, stat) for stat in all_gk_stats)
+    
+        
     def find_id(self):
         all_players = pls.retrieve_all_players()
         name_matches = [ pl for pl in all_players if (match_names ( pl[-2].strip()+" "+pl[-1].strip(), self.name.strip()))]
@@ -125,5 +136,9 @@ class PlayerStats:
         if len (name_matches)>1:
             # More than one match: using the exact match
             name_matches = [ pl for pl in all_players if ( ( pl[-2].strip()+" "+pl[-1].strip() == self.name.strip()))]
-        self.id = int(name_matches[0][0])
+        try:
+            self.id = int(name_matches[0][0])
+        except:
+            logging.error ("[ERROR] %s ID not found (n. matches = %d)" % (self.name, len(name_matches)))
+            return False
         return True

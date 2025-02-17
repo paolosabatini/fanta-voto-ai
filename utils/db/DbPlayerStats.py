@@ -60,7 +60,7 @@ class DbPlayerStats(DbConnection):
         return True
         
     def update_gk_stats_for_matchweek (self, matchweek, list_of_gk):
-        list_of_queries = [ self.get_update_query_gk_stats (gk) for gk in list_of_gk ]
+        list_of_queries = [ self.get_update_query_gk_stats (gk) for gk in list_of_gk if gk.has_valid_gk_stats() ]
         for iquery, query in enumerate(list_of_queries):
             try:
                 self.execute(query)

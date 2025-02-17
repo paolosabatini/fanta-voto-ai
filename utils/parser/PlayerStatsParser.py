@@ -53,7 +53,8 @@ class PlayerStatsParser:
         gk_stat_tables = get_all_gk_stats_tables ( bs4_html )
         for stat_gk_table in gk_stat_tables:
             self.fill_gk_stats ( stat_gk_table )
-        
+
+            
     def get_stat_from_table ( self, stat_table ):
         this_match_stats = []
 
