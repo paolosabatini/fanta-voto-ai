@@ -13,7 +13,7 @@ class DbConnection:
     def __init__ (self):
         self._cnx = mysql.connect(**self._config)
         self._cursor = self._cnx.cursor()
-        
+
 
     def execute (self, query):
         self._cursor.execute(query)

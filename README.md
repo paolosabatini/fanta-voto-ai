@@ -38,6 +38,12 @@ mysql -u root -p < create_tables.sql
 mysql -u root -p --local-infile=1 < load_players_table.sql
 
 ```
+Need to change on server side as well
+```
+mysql>SET GLOBAL local_infile=1
+```
+
+If you have issues with password login in `mysql 9.0`, the correct instructions to downgrade to `8,4` are ![here|https://github.com/Homebrew/homebrew-core/issues/180498#issuecomment-2296006936]
 
 ### Pyhon setup
 Creation of the virtual environment

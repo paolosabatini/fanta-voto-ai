@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 
 import utils.html.HtmlRetriever as hr
 import utils.parser.PlayerStatsParser as psr
+import utils.dresser.PlayerStatsDresser as psd
 from copy import deepcopy
 
 _base_host_url = "https://fbref.com/"
@@ -39,6 +40,7 @@ class MatchReport:
         parser.execute()
         self.stats = deepcopy(parser.get_stats())
         self.errors = deepcopy(parser.get_errors())
-
         parser.clear()
-        
+
+        dresser = psd.PlayerStatsDresser()
+        [ stat.set_mark ( dresser.get_vote( self.matchweek, stat.id ) ) for stat in self.stats ]

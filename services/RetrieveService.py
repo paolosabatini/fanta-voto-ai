@@ -27,11 +27,10 @@ class RetrieveService:
         logging.info ("N. match report found: \t%d" % len (self.matches))
 
         [ match.retrieve_stats() for match in self.matches ]
-
-        # flatten all errors
         self.errors  = [ match_report.errors for  match_report in self.matches ]
         
-
+        
+        
     def get_retrieved_stats(self):
         return self.stats
 

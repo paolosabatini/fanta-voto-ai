@@ -142,3 +142,7 @@ class PlayerStats:
             logging.error ("[ERROR] %s ID not found (n. matches = %d)" % (self.name, len(name_matches)))
             return False
         return True
+
+
+    def set_mark(self, mark):
+        self.mark = mark
