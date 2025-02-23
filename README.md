@@ -70,5 +70,8 @@ $ pip install mysql-connector-python
 $ pip install unidecode
 $ pip install mysql-connector
 $ pip install mysqlclient 
+$ pip install pandas
+$ pip install numpy
+$ pip install matplotlib
 ```
 
