@@ -42,7 +42,8 @@ GK_crosses int,
 GK_crosses_stopped int,
 GK_def_actions_outside_box int,
 GK_avg_distance_def_actions float,
-Mark float
+Mark float,
+FantaPosition char
 );
 
 ALTER TABLE player_stats ADD UNIQUE player_stats_index (`Matchweek`, `ID`);

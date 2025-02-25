@@ -138,6 +138,7 @@ class PlayerStats:
             name_matches = [ pl for pl in all_players if ( ( pl[-2].strip()+" "+pl[-1].strip() == self.name.strip()))]
         try:
             self.id = int(name_matches[0][0])
+            self.fanta_pos = str(name_matches[0][1])
         except:
             logging.error ("[ERROR] %s ID not found (n. matches = %d)" % (self.name, len(name_matches)))
             return False
