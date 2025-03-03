@@ -75,3 +75,56 @@ $ pip install numpy
 $ pip install matplotlib
 ```
 
+
+## 🚀 Installing Metabase with Docker on macOS
+
+### **1. Install and Run Metabase with Docker**
+
+1. **Install Docker** (if not installed):
+   ```sh
+   brew install --cask docker
+   open -a Docker
+   docker --version
+   ```
+
+2. **Pull and Run Metabase**:
+   ```sh
+   docker pull metabase/metabase
+   docker run -d -p 3000:3000 --name metabase metabase/metabase
+   ```
+
+3. **Access Metabase**:
+   - Open **[http://localhost:3000](http://localhost:3000)** in a browser.
+
+4. **Manage Metabase**:
+   ```sh
+   docker stop metabase   # Stop Metabase
+   docker start metabase  # Restart Metabase
+   docker logs -f metabase  # View logs
+   docker rm -f metabase  # Remove container
+   ```
+
+### **2. Connect Metabase to a Local Database**
+
+1. **Ensure your database (e.g., MySQL, PostgreSQL) is running**:
+   ```sh
+   brew services start mysql@8.4  # Example for MySQL
+   ```
+
+2. **Find your local machine's IP address for Docker**:
+   ```sh
+   docker network inspect bridge | grep Gateway
+   ```
+   Use the **Gateway IP** (e.g., `192.168.1.X`) instead of `localhost` when configuring the database connection in Metabase.
+
+3. **Add the database in Metabase**:
+   - Go to **Admin > Databases > Add Database**
+   - Enter database details:
+     - **Host**: Use the IP found in step 2
+     - **Port**: 3306 (for MySQL) or 5432 (for PostgreSQL)
+     - **Username & Password**: Your database credentials
+
+4. **Test the connection and save.** 🎉
+
+Metabase is now installed and connected to a local database on macOS! 🚀
+

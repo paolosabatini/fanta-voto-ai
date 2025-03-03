@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3A
 
 '''
 Setting up logging for the application
@@ -9,9 +9,9 @@ from utils.json.JsonHelper import get_dict_from_json_file
 import pandas as pd
 import matplotlib.pyplot as plt
 from utils.system.SystemHelper import check_and_create_folder
-from utils.plotting.PlotStyles import get_style
+from utils.plotting.PlotStyles import get_marker, get_color
 
-class Plot1D:
+class Plot2D:
 
     _output_folder = "./data/"
     _base_selection = "SELECT * from player_stats"
@@ -23,7 +23,8 @@ class Plot1D:
 
     def init (self):
         self.name = self.config["name"] if "name" in self.config.keys() else "NONE"
-        self.variable = self.config["variable"] if "variable" in self.config.keys() else "NONE"
+        self.variable_x = self.config["variable_x"] if "variable_x" in self.config.keys() else "NONE"
+        self.variable_y = self.config["variable_y"] if "variable_y" in self.config.keys() else "NONE"
         self.selection = self._base_selection
         self.selection += " WHERE " + self.config["selection"] if "selection" in self.config.keys() else str()
         self.group_by = self.config["group_by"] if "group_by" in self.config.keys() else dict()
@@ -34,20 +35,6 @@ class Plot1D:
             self.selection = self._base_selection
             self.df = pd.read_sql(self.selection, self.db._cnx)
 
-    def setup_bins (self):
-        if "bins" in self.config.keys():
-            return self.config["bins"]
-
-        min_value = self.df [ self.variable ].min( axis = 0,
-                                                   numeric_only = True)
-        max_value = self.df [ self.variable ].max( axis = 0,
-                                                   numeric_only = True)
-        n_entries = len(self.df.index)
-        n_bins = int ( float (n_entries)**0.5 )
-        bin_size = float(max_value - min_value) / n_bins
-        
-        return [min_value+i*bin_size for i in range (n_bins+1)]
-
 
     def write (self, label):
         output_folder = self._output_folder + label
@@ -55,40 +42,42 @@ class Plot1D:
         outfile_name =  output_folder + "/" + self.name + ".png"
         self.fig.savefig(outfile_name)
 
-    def draw (self, bins):
+    def draw (self):
         plt.rcParams["image.cmap"] = "Pastel2"
         if len (self.group_by.keys()) == 0:
-            self.draw_single(bins)
+            self.draw_single()
         else:
-            self.draw_multiple(bins)
+            self.draw_multiple()
 
 
-    def draw_single (self, bins):
-        self.df.hist (column = self.variable,
-                      bins = bins,
+    def draw_single (self):
+        self.df.hist (x = self.variable_x,
+                      y = self.variable_y,
                       ax = self.ax,
-                      grid=False, density=1)
+                      grid=True,
+                      label = group_name,
+                      marker = get_marker (0))
 
-    def draw_multiple (self, bins):
+    def draw_multiple (self):
         igroup = 0
         for group_name, group_selection in self.group_by.items():
-            self.df [ eval (group_selection) ].hist(column = self.variable,
-                                                    bins = bins,
-                                                    ax = self.ax,
-                                                    grid=False, density=1,
-                                                    label = group_name,
-                                                    **get_style (igroup))
+            self.df [ eval (group_selection) ].plot.scatter(x = self.variable_x,
+                                                            y = self.variable_y,
+                                                            ax = self.ax,
+                                                            grid=True,
+                                                            label = group_name,
+                                                            marker = get_marker (igroup),
+                                                            color = get_color (igroup))
             igroup += 1
         plt.legend(loc='upper right')
             
             
     def plot (self, label):
         logging.info ("[1D] Plotting %s [#events = %d]" % (self.name, len(self.df.index)))
-        bins = self.setup_bins ()
         self.fig, self.ax = plt.subplots()
-        self.draw( bins )
-        self.ax.set_xlabel (self.name)
-        self.ax.set_ylabel ('Density [1/N]')
+        self.draw(  )
+        self.ax.set_xlabel (self.variable_x)
+        self.ax.set_ylabel (self.variable_y)
         self.ax.set_title (str())
         plt.tight_layout()
         self.write (label)

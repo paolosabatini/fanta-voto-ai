@@ -6,6 +6,7 @@ class DbConnection:
     _db = "fantavoto_ai"
     _config = {
         'user': 'root',
+        'password': 'password',
         'host': 'localhost',
         'database': 'fantavoto_ai'
     }
