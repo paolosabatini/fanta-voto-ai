@@ -13,6 +13,7 @@ class DbPlayerStats(DbConnection):
     `Intercepts`, `Blocks`, `XG`, `NPXG`, `XA`, \
     `SCA`, `GCA`, `Pass_completed`, `Pass_attempted`, `Progressive_pass`, \
     `Carries`, `Progressive_carries`, `Dribbles`, `Dribbles_attempted`, \
+    `Pen_scored`, `Pen_failed`, `Own_goals`, \
     `Mark`, `FantaPosition`)\
     '''
 
@@ -25,6 +26,7 @@ class DbPlayerStats(DbConnection):
         %d, %d, %f, %f, %f, \
         %f, %f, %d, %d, %d, \
         %d, %d, %d, %d,\
+        %d, %d, %d, \
         %f, \'%s\')\
         ''' % (
             int(matchweek), int(stats.id), stats.name, stats.pos, int(stats.min),
@@ -33,6 +35,7 @@ class DbPlayerStats(DbConnection):
             int(stats.intercepts), int(stats.blocks), float(stats.xg), float(stats.npxg), float(stats.xa),
             float(stats.shot_creating_actions), float(stats.goal_creating_actions), int(stats.pass_completed), int(stats.pass_attempted), int(stats.progressive_pass),
             int(stats.carries), int(stats.progressive_carries), int(stats.dribbles), int(stats.dribbles_attempted),
+            int(stats.pen_scored), int(stats.pen_failed), int(stats.own_goals),
             float(stats.mark), str(stats.fanta_pos)
         )
 
@@ -41,11 +44,11 @@ class DbPlayerStats(DbConnection):
         UPDATE player_stats \
         SET GK_sota = %d, GK_GA = %f, GK_saves = %d, GK_PSXG = %f, GK_launches_completed = %d, \
         GK_passes = %d, GK_throws = %d, GK_avg_pass_length = %f, GK_crosses = %d, \
-        GK_crosses_stopped = %d, GK_def_actions_outside_box = %d WHERE ID = %d \
+        GK_crosses_stopped = %d, GK_def_actions_outside_box = %d, GK_pen_saved = %d  WHERE ID = %d \
         ''' % (
             int(gk.gk_sota), float(gk.gk_ga), int(gk.gk_saves), float(gk.gk_psxg), int(gk.gk_launches_completed),
             int(gk.gk_passes), int(gk.gk_throws), float(gk.gk_avg_pass_length), int(gk.gk_crosses),
-            int(gk.gk_crosses_stopped), int(gk.gk_def_actions_outside_box), int(gk.id)
+            int(gk.gk_crosses_stopped), int(gk.gk_def_actions_outside_box), int(gk.gk_pen_saved), int(gk.id)
         )
     
     def write_from_list_for_matchweek(self, matchweek, list_of_stats ):
@@ -57,8 +60,9 @@ class DbPlayerStats(DbConnection):
             self.execute(this_query)
             if not self._debug:
                 self.commit()
-        except:
+        except Exception as e:
             logging.error ("[ERROR] DB:Error in committing players matchweek %d" % (matchweek))
+            logging.error (e)
             return False
         return True
         

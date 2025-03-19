@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 
 import utils.html.HtmlRetriever as hr
 import utils.parser.PlayerStatsParser as psr
+import utils.parser.MatchEventsParser as mer
 import utils.dresser.PlayerStatsDresser as psd
 from copy import deepcopy
 
@@ -18,6 +19,7 @@ class MatchReport:
     url  = None
     stats = []
     errors = []
+    events = []
     
     def __init__ (self, matchweek, home, away, url):
         self.matchweek = matchweek
@@ -42,5 +44,30 @@ class MatchReport:
         self.errors = deepcopy(parser.get_errors())
         parser.clear()
 
+        parser = mer.MatchEventsParser()
+        parser.set_url ( self.url )
+        parser.execute()
+        self.events = deepcopy(parser.get_events())
+        parser.clear()
+
+        [ self.enhance_stats_with_event(event) for event in self.events ]
+        
         dresser = psd.PlayerStatsDresser()
         [ stat.set_mark ( dresser.get_vote( self.matchweek, stat.id ) ) for stat in self.stats ]
+
+
+    def enhance_stats_with_event (self,event):
+        if not event.event_type in ["pen_failed", "own_goal"]:
+            return
+
+        match event.event_type:
+            case "pen_failed":
+                this_stat = next ( stat for stat in self.stats if stat.name == event.player )
+                this_stat.pen_failed += 1
+                if hasattr (event, saved):
+                    gk_stat = next ( stat for stat in self.stats if stat.name == event.saved )
+                    gk_stat.gk_pen_saved += 1
+
+            case "own_goal":
+                this_stat = next ( stat for stat in self.stats if stat.name == event.player )
+                this_stat.own_goals += 1

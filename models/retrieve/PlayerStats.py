@@ -69,7 +69,11 @@ class PlayerStats:
         self.progressive_carries = 0
         self.dribbles = 0
         self.dribbles_attempted = 0
-    
+        #events
+        self.pen_failed = 0
+        self.pen_scored = 0
+        self.own_goals = 0
+        
     def __init__ (self, row):
         self.name = get_stat_from_row( row = row, data_stat = "player", is_name=True)
         self.pos = get_stat_from_row(row, "position")
@@ -98,7 +102,11 @@ class PlayerStats:
         self.progressive_carries = get_stat_from_row(row, "progressive_carries")
         self.dribbles = get_stat_from_row(row, "take_ons_won")
         self.dribbles_attempted = get_stat_from_row(row, "take_ons")
-        
+        #events
+        self.pen_failed = 0
+        self.pen_scored = 0
+        self.own_goals = 0
+
         
     def fill_gk_stats (self,row):
         self.gk_stats_filled = True
@@ -115,13 +123,14 @@ class PlayerStats:
         self.gk_crosses_stopped = get_stat_from_row(row, "gk_crosses_stopped")
         self.gk_def_actions_outside_box = get_stat_from_row(row, "gk_def_actions_outside_pen_area")
         # self.gk_avg_distance_def_actions = get_stat_from_row(row, "gk_avg_distance_def_actions")
-
-
+        # events
+        self.gk_pen_saved = 0
+        
     def has_valid_gk_stats (self):
         all_gk_stats = ["gk_sota", "gk_ga", "gk_saves", "gk_psxg",
                         "gk_launches_completed", "gk_launches", "gk_passes",
                         "gk_throws", "gk_avg_pass_length", "gk_crosses",
-                        "gk_crosses", "gk_crosses_stopped", "gk_def_actions_outside_box"]
+                        "gk_crosses", "gk_crosses_stopped", "gk_def_actions_outside_box", "gk_pen_saved"]
         return self.gk_stats_filled \
             and all ( hasattr (self, stat) for stat in all_gk_stats)
     

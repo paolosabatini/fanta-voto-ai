@@ -30,6 +30,9 @@ Carries int,
 Progressive_carries int,
 Dribbles int,
 Dribbles_attempted int,
+Pen_scored int,
+Pen_failed int,
+Own_goals int,
 GK_sota int,
 GK_GA int,
 GK_saves int,
@@ -42,8 +45,10 @@ GK_crosses int,
 GK_crosses_stopped int,
 GK_def_actions_outside_box int,
 GK_avg_distance_def_actions float,
+GK_pen_saved int,
 Mark float,
-FantaPosition char
+FantaPosition char,
+MatchStatsRef varchar(255)
 );
 
 ALTER TABLE player_stats ADD UNIQUE player_stats_index (`Matchweek`, `ID`);
