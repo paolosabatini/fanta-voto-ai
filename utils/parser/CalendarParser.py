@@ -34,6 +34,7 @@ class CalendarParser:
 
     _parser_algo = "html.parser"
     _calendar_table_id = "sched_2024-2025_208_1"
+    _calendar_table_id_poule = "sched_2024-2025_208_2"
     url = str()
     matches = []
 
@@ -42,7 +43,14 @@ class CalendarParser:
     
         
     def parse_calendar_by_matchweek (self, bs4_html, matchweek):
-        calendar_table = bs4_html.body.find ("table", attrs={"id" : self._calendar_table_id})
+        # setup the table to check and matchweek for matching the correct matchweek
+        this_calendar_table_id = self._calendar_table_id
+        matchweek_for_table_matching = matchweek
+        if matchweek>18:
+            this_calendar_table_id = self._calendar_table_id_poule
+            matchweek_for_table_matching = matchweek - 18
+
+        calendar_table = bs4_html.body.find ("table", attrs={"id" : this_calendar_table_id})
         for irow, row in enumerate (calendar_table.findChildren('tr')):
             if is_header_of_calendar_table (irow):
                 header = get_header_columns (row)
@@ -54,9 +62,9 @@ class CalendarParser:
                 # this is a spacer
                 continue
 
-            if this_matchweek < matchweek:
+            if this_matchweek < matchweek_for_table_matching:
                 continue
-            elif this_matchweek > matchweek:
+            elif this_matchweek > matchweek_for_table_matching:
                 break
 
             
