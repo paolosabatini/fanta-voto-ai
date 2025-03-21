@@ -48,7 +48,8 @@ GK_avg_distance_def_actions float,
 GK_pen_saved int,
 Mark float,
 FantaPosition char,
-MatchStatsRef varchar(255)
+MatchStatsRef varchar(255),
+Team char
 );
 
 ALTER TABLE player_stats ADD UNIQUE player_stats_index (`Matchweek`, `ID`);
@@ -58,4 +59,36 @@ ID int NOT NULL UNIQUE,
 Position char NOT NULL,
 Name varchar(255) NOT NULL,
 Surname varchar(255) NOT NULL
+);
+
+CREATE TABLE match_stats (
+MatchID varchar(255) NOT NULL UNIQUE,
+Home_team varchar(255),
+Home_goal int,
+Home_xg float,
+Home_possession int,
+Home_pass_accuracy int,
+Home_sota int,
+Home_saves int,
+Home_fouls int,
+Home_corners int,
+Home_crosses int,
+Home_tackles int,
+Home_interceptions int,
+Home_clearances int,
+Home_offsides int,
+Away_team varchar(255),
+Away_goal int,
+Away_xg float,
+Away_possession int,
+Away_pass_accuracy int,
+Away_sota int,
+Away_saves int,
+Away_fouls int,
+Away_corners int,
+Away_crosses int,
+Away_tackles int,
+Away_interceptions int,
+Away_clearances int,
+Away_offsides int
 );

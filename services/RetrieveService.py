@@ -10,7 +10,7 @@ from utils.parser.CalendarParser import CalendarParser
 class RetrieveService:
 
     _url = "https://fbref.com/en/comps/208/schedule/Serie-A-Scores-and-Fixtures"
-    
+
     matches = []
     stats = []
     errors = []
@@ -26,6 +26,7 @@ class RetrieveService:
         self.matches = cp.get_matches_by_matchweek (matchweek = self.matchweek)
         logging.info ("N. match report found: \t%d" % len (self.matches))
 
+        [ match.retrieve_match_stats() for match in self.matches ]
         [ match.retrieve_stats() for match in self.matches ]
         self.errors  = [ match_report.errors for  match_report in self.matches ]
         
@@ -39,6 +40,9 @@ class RetrieveService:
 
     def get_all_stats (self):
         return [ pl_stat for match_report in self.matches for pl_stat in match_report.stats ] 
+
+    def get_all_match_stats (self):
+        return [ match_report.match_stats for match_report in self.matches ] 
 
     def get_all_errors(self):
         return [ err for match_report in self.matches for err in match_report.errors ] 

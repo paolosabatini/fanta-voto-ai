@@ -29,6 +29,9 @@ class MatchEventsParser:
         self.url = url
         self.html = hr.get_html (self.url)
 
+    def set_html (self, html):
+        self.html = html
+
     def get_events(self):
         return self.events
 

@@ -14,7 +14,8 @@ class DbPlayerStats(DbConnection):
     `SCA`, `GCA`, `Pass_completed`, `Pass_attempted`, `Progressive_pass`, \
     `Carries`, `Progressive_carries`, `Dribbles`, `Dribbles_attempted`, \
     `Pen_scored`, `Pen_failed`, `Own_goals`, \
-    `Mark`, `FantaPosition`)\
+    `Mark`, `FantaPosition`,\
+    `MatchStatsRef`, `Team`)\
     '''
 
     def get_values_for_player (self, stats, matchweek):
@@ -27,7 +28,8 @@ class DbPlayerStats(DbConnection):
         %f, %f, %d, %d, %d, \
         %d, %d, %d, %d,\
         %d, %d, %d, \
-        %f, \'%s\')\
+        %f, \'%s\',\
+        \'%s\', \'%s\')\
         ''' % (
             int(matchweek), int(stats.id), stats.name, stats.pos, int(stats.min),
             int(stats.goal), int(stats.assist), int(stats.pen), int(stats.pen_attempted), int(stats.shots),
@@ -36,7 +38,8 @@ class DbPlayerStats(DbConnection):
             float(stats.shot_creating_actions), float(stats.goal_creating_actions), int(stats.pass_completed), int(stats.pass_attempted), int(stats.progressive_pass),
             int(stats.carries), int(stats.progressive_carries), int(stats.dribbles), int(stats.dribbles_attempted),
             int(stats.pen_scored), int(stats.pen_failed), int(stats.own_goals),
-            float(stats.mark), str(stats.fanta_pos)
+            float(stats.mark), str(stats.fanta_pos),
+            str(stats.match_ref), str(stats.team)
         )
 
     def get_update_query_gk_stats (self, gk):

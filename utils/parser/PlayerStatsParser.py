@@ -46,8 +46,9 @@ class PlayerStatsParser:
     def execute(self):
         bs4_html = BeautifulSoup (self.html, self._parser_algo)
         stat_tables = get_all_stats_tables ( bs4_html )
-        for stat_table in stat_tables:
-            self.stats += self.get_stat_from_table ( stat_table )
+        for istat_table, stat_table in enumerate (stat_tables):
+            team = 'H' if istat_table == 0 else 'A'
+            self.stats += self.get_stat_from_table ( stat_table, team )
             
             
         gk_stat_tables = get_all_gk_stats_tables ( bs4_html )
@@ -55,12 +56,13 @@ class PlayerStatsParser:
             self.fill_gk_stats ( stat_gk_table )
 
             
-    def get_stat_from_table ( self, stat_table ):
+    def get_stat_from_table ( self, stat_table, team ):
         this_match_stats = []
 
         for irow, row in enumerate (stat_table.find_all(["tr"])):
             if is_table_row_to_be_skipped (irow, row): continue
             player_stats = ps.PlayerStats (row)
+            player_stats.team = team # dress with the team info
 
             if not player_stats.find_id():
                 logging.error ("[ERROR] %s ID not found" % player_stats.name)

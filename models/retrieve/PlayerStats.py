@@ -39,6 +39,8 @@ TODO: Make it more configurable
 class PlayerStats:
 
     id = None
+    team = None
+    match_ref = None
     gk_stats_filled= False
     def __init__(self):
         self.name = str()
@@ -156,3 +158,6 @@ class PlayerStats:
 
     def set_mark(self, mark):
         self.mark = mark
+
+    def set_match_ref (self, match_ref):
+        self.match_ref = match_ref

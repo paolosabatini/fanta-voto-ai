@@ -13,6 +13,7 @@ Import needed services
 '''
 from services.RetrieveService import RetrieveService
 from utils.db.DbPlayerStats import DbPlayerStats
+from utils.db.DbMatchStats import DbMatchStats
 
 '''
 Main function
@@ -24,19 +25,22 @@ def main():
 
     rs = RetrieveService ( matchweek = matchweek )
     rs.execute()
+    list_of_match_stats_for_matchweek = rs.get_all_match_stats()
     list_of_player_stats_for_matchweek = rs.get_all_stats()
     list_of_errors = rs.get_all_errors()
+    logging.info("\t -> N. match stats: \t%d" % len(list_of_match_stats_for_matchweek))
     logging.info("\t -> N. player stats:\t%d" % len(list_of_player_stats_for_matchweek))
     logging.info("\t -> N. errors:      \t%d" % len(list_of_errors))
 
-    success = store_stats( matchweek, list_of_player_stats_for_matchweek ) 
+    success = store_stats( matchweek, list_of_match_stats_for_matchweek, list_of_player_stats_for_matchweek ) 
     logging.info ("Db updated: %s" % "SUCCESS" if success else "FAILED")
     
 '''
 Store stats
 '''
-def store_stats( matchweek, list_of_stats ):
-    return DbPlayerStats().write_from_list_for_matchweek(matchweek, list_of_stats) \
+def store_stats( matchweek, list_of_match_stats, list_of_stats  ):
+    return DbMatchStats().write_from_list ( list_of_match_stats ) \
+        and DbPlayerStats().write_from_list_for_matchweek(matchweek, list_of_stats) \
         and DbPlayerStats().update_gk_stats_for_matchweek(matchweek, [gk for gk in list_of_stats if gk.pos == 'GK'])
     
 '''

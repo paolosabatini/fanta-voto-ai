@@ -5,6 +5,7 @@ logger = logging.getLogger(__name__)
 import utils.html.HtmlRetriever as hr
 import utils.parser.PlayerStatsParser as psr
 import utils.parser.MatchEventsParser as mer
+import utils.parser.MatchStatsParser as msp
 import utils.dresser.PlayerStatsDresser as psd
 from copy import deepcopy
 
@@ -17,6 +18,7 @@ class MatchReport:
     home = None
     away = None
     url  = None
+    match_stats = None
     stats = []
     errors = []
     events = []
@@ -34,6 +36,12 @@ class MatchReport:
                  self.away,
                  "URL found" if self.url != None else "URL missing"))
         
+    def retrieve_match_stats(self):
+        parser = msp.MatchStatsParser()
+        parser.set_url (self.url)
+        parser.execute()
+        self.match_stats = parser.get_stats()
+        parser.clear()
     
     def retrieve_stats(self):
 
@@ -42,19 +50,20 @@ class MatchReport:
         parser.execute()
         self.stats = deepcopy(parser.get_stats())
         self.errors = deepcopy(parser.get_errors())
+        this_html = deepcopy (parser.html) # otherwise gets blocked
         parser.clear()
 
         parser = mer.MatchEventsParser()
-        parser.set_url ( self.url )
+        parser.set_html ( this_html )
         parser.execute()
         self.events = deepcopy(parser.get_events())
         parser.clear()
 
+        [ stat.set_match_ref(self.match_stats.id) for stat in self.stats ]
         [ self.enhance_stats_with_event(event) for event in self.events ]
         
         dresser = psd.PlayerStatsDresser()
         [ stat.set_mark ( dresser.get_vote( self.matchweek, stat.id ) ) for stat in self.stats ]
-
 
     def enhance_stats_with_event (self,event):
         if not event.event_type in ["pen_failed", "own_goal"]:
@@ -64,7 +73,7 @@ class MatchReport:
             case "pen_failed":
                 this_stat = next ( stat for stat in self.stats if stat.name == event.player )
                 this_stat.pen_failed += 1
-                if hasattr (event, saved):
+                if hasattr (event, "saved"):
                     gk_stat = next ( stat for stat in self.stats if stat.name == event.saved )
                     gk_stat.gk_pen_saved += 1
 
