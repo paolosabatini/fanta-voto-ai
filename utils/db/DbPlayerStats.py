@@ -86,11 +86,3 @@ class DbPlayerStats(DbConnection):
         return True
 
 
-    def query (self, query):
-        if query == None or query == "" or "SELECT" not in query:
-            logging.error ("[ERROR] Passed query is empty or not valid")
-            return []
-        self.execute (query)
-        stats = [ list(pl) for pl in self.fetchall() ]
-        return stats
-        

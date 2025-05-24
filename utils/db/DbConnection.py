@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import MySQLdb as mysql
 
@@ -25,3 +25,12 @@ class DbConnection:
 
     def commit(self):
         self._cnx.commit()
+
+    def query (self, query):
+        if query == None or query == "" or "SELECT" not in query:
+            logging.error ("[ERROR] Passed query is empty or not valid")
+            return []
+        self.execute (query)
+        stats = [ list(row) for row in self.fetchall() ]
+        return stats
+        

@@ -73,6 +73,11 @@ $ pip install mysqlclient
 $ pip install pandas
 $ pip install numpy
 $ pip install matplotlib
+$ pip install plotly
+$ pip install scipy
+$ pip install seaborn
+$ pip install -U kaleido 
+pip install pyarrow
 ```
 
 
@@ -127,4 +132,17 @@ $ pip install matplotlib
 4. **Test the connection and save.** 🎉
 
 Metabase is now installed and connected to a local database on macOS! 🚀
+
+## How to use Metabase
+
+Histogram of marks
+```
+SELECT 
+    Mark,
+    COUNT(*) AS frequency
+FROM player_stats
+WHERE Mark BETWEEN 1 AND 10 
+GROUP BY Mark
+ORDER BY Mark;
+```
 
