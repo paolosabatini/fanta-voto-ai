@@ -15,22 +15,33 @@ def get_stat_from_row ( row, data_stat, is_name = False):
     return base_field.a.contents[0] if is_name else base_field.contents[0]
 
 def prepare_name (name):
+    # need to swap
+    if name == "Yang Lina":
+        name = "Lina Yang"
     return unidecode (re.sub (_characters, ' ', name.replace("  "," ")))
 
 def match_names(csv_name, reference_name):
     csv_name_prepared = prepare_name(csv_name)
     reference_name_prepared = prepare_name(reference_name)
-
     name_and_surname_matching = (csv_name_prepared.strip() == reference_name_prepared.strip())
     only_surname_matching = (csv_name_prepared.split(" ")[-1] == reference_name_prepared.split(" ")[-1])
     is_composite_surname = ( " ".join( reference_name_prepared.split()[-2:] ) ==  " ".join( csv_name_prepared.split()[-2:]) )
     swapped_composite_surname = (reference_name_prepared.split()[-2] == csv_name_prepared.split()[-1] ) or (reference_name_prepared.split()[-1] == csv_name_prepared.split()[-2] )
     is_victoria_della = (reference_name_prepared == "Victoria Della") and csv_name_prepared == "Tori Dellaperuta"
-
+    is_hanshaw = (reference_name_prepared == "Verena Aschauer") and csv_name_prepared == "Verena Hanshaw"
+    is_capelletti = (reference_name_prepared == "Alessia Cappelletti") and (csv_name_prepared == "Alessia Capelletti")
+    is_bercelli = (reference_name_prepared == "Kiara Bercelli") and (csv_name_prepared == "Kiara Barcelli")
+    name_and_surname_swapped = (len(reference_name_prepared.split())==2 and str(reference_name_prepared.split()[-1]+" "+reference_name_prepared.split()[0]) == csv_name_prepared)
+    # if (reference_name_prepared == "Lena Hansen"):
+    #     print ("csv '%s'" % csv_name_prepared)
+    #     print ("ref '%s'" % reference_name_prepared)
+    #     print ("matched ", is_hansen)
     total_matching_condition = name_and_surname_matching \
         or only_surname_matching or is_composite_surname \
-        or swapped_composite_surname or is_victoria_della
-
+        or swapped_composite_surname or is_victoria_della \
+        or is_hanshaw or is_capelletti \
+        or name_and_surname_swapped \
+        or is_bercelli
     return total_matching_condition
 
 '''
@@ -147,6 +158,7 @@ class PlayerStats:
         if len (name_matches)>1:
             # More than one match: using the exact match
             name_matches = [ pl for pl in all_players if ( ( pl[-2].strip()+" "+pl[-1].strip() == self.name.strip()))]
+
         try:
             self.id = int(name_matches[0][0])
             self.fanta_pos = str(name_matches[0][1])

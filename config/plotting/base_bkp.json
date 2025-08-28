@@ -1,0 +1,89 @@
+{
+    "1D":
+    [
+	{
+	    "name" : "Marks",
+	    "variable" : "Mark",
+	    "selection" : "Mark>0",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
+	    "group_by" : {
+		"P" : " self.df [\"FantaPosition\"] == 'P'",
+		"D" : " self.df [\"FantaPosition\"] == 'D'",
+		"C" : " self.df [\"FantaPosition\"] == 'C'",
+		"A" : " self.df [\"FantaPosition\"] == 'A'"
+	    }
+	},
+	{
+	    "name" : "Goal_Conceded",
+	    "variable" : "GK_GA",
+	    "selection" : "FantaPosition='P' AND Mark>0",
+	    "bins" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5],
+	    "group_by" : {
+		"Mark < 5.5" : " self.df [\"Mark\"] < 5.5",
+		"Mark = 5.5" : " self.df [\"Mark\"] == 5.5",
+		"Mark = 6"   : " self.df [\"Mark\"] == 6.5",
+		"Mark = 6.5" : " self.df [\"Mark\"] == 6.5",
+		"Mark > 6.5" : " self.df [\"Mark\"] > 6.5"
+	    }
+	},
+	{
+	    "name" : "SOTA",
+	    "variable" : "GK_sota",
+	    "selection" : "FantaPosition='P' AND Mark>0",
+	    "bins" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,10.5,15.5],
+	    "group_by" : {
+		"Mark < 5.5" : " self.df [\"Mark\"] < 5.5",
+		"Mark = 5.5" : " self.df [\"Mark\"] == 5.5",
+		"Mark = 6"   : " self.df [\"Mark\"] == 6.5",
+		"Mark = 6.5" : " self.df [\"Mark\"] == 6.5",
+		"Mark > 6.5" : " self.df [\"Mark\"] > 6.5"
+	    }
+	},
+	{
+	    "name" : "Saves",
+	    "variable" : "GK_saves",
+	    "selection" : "FantaPosition='P' AND Mark>0",
+	    "bins" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,10.5,15.5],
+	    "group_by" : {
+		"Mark < 5.5" : " self.df [\"Mark\"] < 5.5",
+		"Mark = 5.5" : " self.df [\"Mark\"] == 5.5",
+		"Mark = 6"   : " self.df [\"Mark\"] == 6.5",
+		"Mark = 6.5" : " self.df [\"Mark\"] == 6.5",
+		"Mark > 6.5" : " self.df [\"Mark\"] > 6.5"
+	    }
+	},
+	{
+	    "name" : "PSXG",
+	    "variable" : "GK_PSXG",
+	    "selection" : "FantaPosition='P' AND Mark>0",
+	    "bins" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,10.5,15.5],
+	    "group_by" : {
+		"Mark < 5.5" : " self.df [\"Mark\"] < 5.5",
+		"Mark = 5.5" : " self.df [\"Mark\"] == 5.5",
+		"Mark = 6"   : " self.df [\"Mark\"] == 6.5",
+		"Mark = 6.5" : " self.df [\"Mark\"] == 6.5",
+		"Mark > 6.5" : " self.df [\"Mark\"] > 6.5"
+	    }
+	}
+
+    ],
+    "2D" : [
+	{
+	    "name" : "SOTA_vs_GA",
+	    "variable_x" : "GK_sota",
+	    "variable_y" : "GK_GA",
+	    "selection" : "FantaPosition='P' AND Mark>0",
+	    "bins_x" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,10.5,15.5],
+	    "bins_y" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5],
+	    "group_by" : {
+		"Mark < 5.5" : " self.df [\"Mark\"] < 5.5",
+		"Mark = 5.5" : " self.df [\"Mark\"] == 5.5",
+		"Mark = 6"   : " self.df [\"Mark\"] == 6.5",
+		"Mark = 6.5" : " self.df [\"Mark\"] == 6.5",
+		"Mark > 6.5" : " self.df [\"Mark\"] > 6.5"
+	    }
+	}
+
+
+    ]
+}

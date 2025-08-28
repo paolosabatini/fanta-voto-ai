@@ -42,16 +42,16 @@ class DbPlayerStats(DbConnection):
             str(stats.match_ref), str(stats.team)
         )
 
-    def get_update_query_gk_stats (self, gk):
+    def get_update_query_gk_stats (self, gk, matchweek):
         return '''\
         UPDATE player_stats \
         SET GK_sota = %d, GK_GA = %f, GK_saves = %d, GK_PSXG = %f, GK_launches_completed = %d, \
         GK_passes = %d, GK_throws = %d, GK_avg_pass_length = %f, GK_crosses = %d, \
-        GK_crosses_stopped = %d, GK_def_actions_outside_box = %d, GK_pen_saved = %d  WHERE ID = %d \
+        GK_crosses_stopped = %d, GK_def_actions_outside_box = %d, GK_pen_saved = %d  WHERE ID = %d AND Matchweek = %d \
         ''' % (
             int(gk.gk_sota), float(gk.gk_ga), int(gk.gk_saves), float(gk.gk_psxg), int(gk.gk_launches_completed),
             int(gk.gk_passes), int(gk.gk_throws), float(gk.gk_avg_pass_length), int(gk.gk_crosses),
-            int(gk.gk_crosses_stopped), int(gk.gk_def_actions_outside_box), int(gk.gk_pen_saved), int(gk.id)
+            int(gk.gk_crosses_stopped), int(gk.gk_def_actions_outside_box), int(gk.gk_pen_saved), int(gk.id), int(matchweek)
         )
     
     def write_from_list_for_matchweek(self, matchweek, list_of_stats ):
@@ -70,7 +70,7 @@ class DbPlayerStats(DbConnection):
         return True
         
     def update_gk_stats_for_matchweek (self, matchweek, list_of_gk):
-        list_of_queries = [ self.get_update_query_gk_stats (gk) for gk in list_of_gk if gk.has_valid_gk_stats() ]
+        list_of_queries = [ self.get_update_query_gk_stats (gk, matchweek) for gk in list_of_gk if gk.has_valid_gk_stats() ]
         for iquery, query in enumerate(list_of_queries):
             try:
                 self.execute(query)

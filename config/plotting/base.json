@@ -7,83 +7,83 @@
 	    "selection" : "Mark>0",
 	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
 	    "group_by" : {
-		"P" : " self.df [\"FantaPosition\"] == 'P'",
-		"D" : " self.df [\"FantaPosition\"] == 'D'",
-		"C" : " self.df [\"FantaPosition\"] == 'C'",
-		"A" : " self.df [\"FantaPosition\"] == 'A'"
+		"P" : " FantaPosition == 'P'",
+		"D" : " FantaPosition == 'D'",
+		"C" : " FantaPosition == 'C'",
+		"A" : " FantaPosition == 'A'"
 	    }
 	},
 	{
-	    "name" : "Goal_Conceded",
-	    "variable" : "GK_GA",
-	    "selection" : "FantaPosition='P' AND Mark>0",
-	    "bins" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5],
+	    "name" : "Marks_by_result",
+	    "variable" : "Mark",
+	    "selection" : "Mark>0",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
 	    "group_by" : {
-		"Mark < 5.5" : " self.df [\"Mark\"] < 5.5",
-		"Mark = 5.5" : " self.df [\"Mark\"] == 5.5",
-		"Mark = 6"   : " self.df [\"Mark\"] == 6.5",
-		"Mark = 6.5" : " self.df [\"Mark\"] == 6.5",
-		"Mark > 6.5" : " self.df [\"Mark\"] > 6.5"
+		"Win" : " goal > goal_against ",
+		"Loss" : " goal < goal_against ",
+		"Draw" : " goal == goal_against "
 	    }
 	},
 	{
-	    "name" : "SOTA",
-	    "variable" : "GK_sota",
-	    "selection" : "FantaPosition='P' AND Mark>0",
-	    "bins" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,10.5,15.5],
+	    "name" : "Marks_by_result_detailed",
+	    "variable" : "Mark",
+	    "selection" : "Mark>0",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
 	    "group_by" : {
-		"Mark < 5.5" : " self.df [\"Mark\"] < 5.5",
-		"Mark = 5.5" : " self.df [\"Mark\"] == 5.5",
-		"Mark = 6"   : " self.df [\"Mark\"] == 6.5",
-		"Mark = 6.5" : " self.df [\"Mark\"] == 6.5",
-		"Mark > 6.5" : " self.df [\"Mark\"] > 6.5"
+		"Goal diff > 1" : " (goal-goal_against) >1  ",
+		"Goal diff = 1" : " (goal-goal_against) ==1  ",
+		"Goal diff = -1" : " (goal-goal_against) ==-1  ",
+		"Goal diff < -1" : " (goal-goal_against) <-1  ",
+		"Draw" : " goal == goal_against "
 	    }
 	},
 	{
-	    "name" : "Saves",
-	    "variable" : "GK_saves",
-	    "selection" : "FantaPosition='P' AND Mark>0",
-	    "bins" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,10.5,15.5],
+	    "name" : "Marks_by_xgdiff",
+	    "variable" : "Mark",
+	    "selection" : "Mark>0",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
 	    "group_by" : {
-		"Mark < 5.5" : " self.df [\"Mark\"] < 5.5",
-		"Mark = 5.5" : " self.df [\"Mark\"] == 5.5",
-		"Mark = 6"   : " self.df [\"Mark\"] == 6.5",
-		"Mark = 6.5" : " self.df [\"Mark\"] == 6.5",
-		"Mark > 6.5" : " self.df [\"Mark\"] > 6.5"
+		"Win XG" : " (xg-xg_against)>0.5 ",
+		"Loss XG" : "  (xg-xg_against)<-0.5 ",
+		"Draw XG" : "  (xg-xg_against)<0.5 and (xg-xg_against)>-0.5 "
 	    }
 	},
 	{
-	    "name" : "PSXG",
-	    "variable" : "GK_PSXG",
-	    "selection" : "FantaPosition='P' AND Mark>0",
-	    "bins" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,10.5,15.5],
+	    "name" : "Marks_for_wins",
+	    "variable" : "Mark",
+	    "selection" : "(Mark>0) and (goal>goal_against) and FantaPosition != 'P'",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
 	    "group_by" : {
-		"Mark < 5.5" : " self.df [\"Mark\"] < 5.5",
-		"Mark = 5.5" : " self.df [\"Mark\"] == 5.5",
-		"Mark = 6"   : " self.df [\"Mark\"] == 6.5",
-		"Mark = 6.5" : " self.df [\"Mark\"] == 6.5",
-		"Mark > 6.5" : " self.df [\"Mark\"] > 6.5"
+		"No bonus/malus" : "(Goals+Assists+Yellow_card+Red_card+Pen_failed+Own_goals) == 0 ",
+		"Bonus" : "(Goals+Assists)>0 and (Yellow_card+Red_card+Pen_failed+Own_goals)==0",
+		"Malus" : "(Yellow_card+Red_card+Pen_failed+Own_goals)>0 and (Goals+Assists)==0",
+		"Mixed" : "(Goals+Assists)>0 and (Yellow_card+Red_card+Pen_failed+Own_goals)>0"
+	    }
+	},
+	{
+	    "name" : "Marks_for_draws",
+	    "variable" : "Mark",
+	    "selection" : "(Mark>0) and (goal==goal_against) and FantaPosition != 'P'",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
+	    "group_by" : {
+		"No bonus/malus" : "(Goals+Assists+Yellow_card+Red_card+Pen_failed+Own_goals) == 0 ",
+		"Bonus" : "(Goals+Assists)>0 and (Yellow_card+Red_card+Pen_failed+Own_goals)==0",
+		"Malus" : "(Yellow_card+Red_card+Pen_failed+Own_goals)>0 and (Goals+Assists)==0",
+		"Mixed" : "(Goals+Assists)>0 and (Yellow_card+Red_card+Pen_failed+Own_goals)>0"
+	    }
+	},
+	{
+	    "name" : "Marks_for_losses",
+	    "variable" : "Mark",
+	    "selection" : "(Mark>0) and (goal<goal_against) and FantaPosition != 'P'",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
+	    "group_by" : {
+		"No bonus/malus" : "(Goals+Assists+Yellow_card+Red_card+Pen_failed+Own_goals) == 0 ",
+		"Bonus" : "(Goals+Assists)>0 and (Yellow_card+Red_card+Pen_failed+Own_goals)==0",
+		"Malus" : "(Yellow_card+Red_card+Pen_failed+Own_goals)>0 and (Goals+Assists)==0",
+		"Mixed" : "(Goals+Assists)>0 and (Yellow_card+Red_card+Pen_failed+Own_goals)>0"
 	    }
 	}
-
-    ],
-    "2D" : [
-	{
-	    "name" : "SOTA_vs_GA",
-	    "variable_x" : "GK_sota",
-	    "variable_y" : "GK_GA",
-	    "selection" : "FantaPosition='P' AND Mark>0",
-	    "bins_x" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,10.5,15.5],
-	    "bins_y" : [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5],
-	    "group_by" : {
-		"Mark < 5.5" : " self.df [\"Mark\"] < 5.5",
-		"Mark = 5.5" : " self.df [\"Mark\"] == 5.5",
-		"Mark = 6"   : " self.df [\"Mark\"] == 6.5",
-		"Mark = 6.5" : " self.df [\"Mark\"] == 6.5",
-		"Mark > 6.5" : " self.df [\"Mark\"] > 6.5"
-	    }
-	}
-
 
     ]
 }

@@ -1,0 +1,50 @@
+{
+    "1D":
+    [
+	{
+	    "name" : "GK_Marks_by_result",
+	    "variable" : "Mark",
+	    "selection" : "(Mark>0) and (FantaPosition == 'P')",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
+	    "group_by" : {
+		"Win" : " goal > goal_against ",
+		"Loss" : " goal < goal_against ",
+		"Draw" : " goal == goal_against "
+	    }
+	},
+	{
+	    "name" : "GK_Marks_vs_PSXGminusGA",
+	    "variable" : "Mark",
+	    "selection" : "(Mark>0) and (FantaPosition == 'P')",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
+	    "group_by" : {
+		"Overperformed" : " (GK_PSXG-GK_GA)>0.5",
+		"Exp. performed" : "(GK_PSXG-GK_GA)<0.5 and (GK_PSXG-GK_GA)>-0.5",
+		"Underperformed" : "(GK_PSXG-GK_GA)<-0.5"
+	    }
+	},
+	{
+	    "name" : "GK_Marks_vs_bonuses",
+	    "variable" : "Mark",
+	    "selection" : "(Mark>0) and (FantaPosition == 'P')",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
+	    "group_by" : {
+		"Bonus" : "(GK_GA+Own_goals+Yellow_card+Red_card)==0 and (Assists+GK_pen_saved)!=0",
+		"No bonus/malus" : "(GK_GA+Own_goals+Yellow_card+Red_card)==0 and (Assists+GK_pen_saved)==0",
+		"Malus" : "(GK_GA+Own_goals+Yellow_card+Red_card)!=0 and (Assists+GK_pen_saved)==0",
+		"Mixed" : "(GK_GA+Own_goals+Yellow_card+Red_card)!=0 and (Assists+GK_pen_saved)!=0"
+	    }
+	},
+	{
+	    "name" : "GK_PenSaved_vs_Mark",
+	    "variable" : "GK_pen_saved",
+	    "selection" : "(FantaPosition == 'P')",
+	    "bins" : [-0.5,0.5,1.5,2.5,3.5],
+	    "group_by" : {
+		"Mark<6" : "Mark<6",
+		"Mark=6" : "Mark==6",
+		"Mark>6" : "Mark>6"
+	    }
+	}
+    ]
+}

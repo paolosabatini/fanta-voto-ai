@@ -26,6 +26,7 @@ class MatchEvent:
             case "pen_failed":
                 self.init_pen_failed_event(row)
             case _:
+                logging.warning ("Row not understood: << %s >>" % row)
                 return
 
     def init_sub_event(self, event_row):
@@ -64,6 +65,8 @@ class MatchEvent:
         elif len (event_row.findAll("div", attrs={"class":"event_icon yellow_card"})) != 0:
             return "yellow_card"
         elif len (event_row.findAll("div", attrs={"class":"event_icon red_card"})) != 0:
+            return "red_card"
+        elif len (event_row.findAll("div", attrs={"class":"event_icon yellow_red_card"})) != 0:
             return "red_card"
         elif len (event_row.findAll("div", attrs={"class":"event_icon goal"})) != 0:
             return "goal"
