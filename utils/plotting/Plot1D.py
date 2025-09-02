@@ -16,9 +16,9 @@ class Plot1D:
     _output_folder = "./data/"
     _base_selection = "SELECT * from player_stats"
     
-    def __init__ (self, config, db):
+    def __init__ (self, config, df):
         self.config = config
-        self.db = db
+        self.df = df
         self.init ()
 
     def init (self):
@@ -27,12 +27,7 @@ class Plot1D:
         self.selection = self._base_selection
         self.selection += " WHERE " + self.config["selection"] if "selection" in self.config.keys() else str()
         self.group_by = self.config["group_by"] if "group_by" in self.config.keys() else dict()
-        try:
-            self.df = pd.read_sql(self.selection, self.db._cnx)
-        except:
-            logging.error ("[ERROR] Query `%s` not valid: fallback to inclusive selection" % self.selection)
-            self.selection = self._base_selection
-            self.df = pd.read_sql(self.selection, self.db._cnx)
+        
 
     def setup_bins (self):
         if "bins" in self.config.keys():
@@ -87,7 +82,7 @@ class Plot1D:
         bins = self.setup_bins ()
         self.fig, self.ax = plt.subplots()
         self.draw( bins )
-        self.ax.set_xlabel (self.name)
+        self.ax.set_xlabel (self.xtitle if self.xtitle != None else self.name)
         self.ax.set_ylabel ('Density [1/N]')
         self.ax.set_title (str())
         plt.tight_layout()

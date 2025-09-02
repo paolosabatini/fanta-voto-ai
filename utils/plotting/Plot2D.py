@@ -16,24 +16,24 @@ class Plot2D:
     _output_folder = "./data/"
     _base_selection = "SELECT * from player_stats"
     
-    def __init__ (self, config, db):
+    def __init__ (self, config, df):
         self.config = config
-        self.db = db
+        self.db = df
         self.init ()
 
     def init (self):
         self.name = self.config["name"] if "name" in self.config.keys() else "NONE"
         self.variable_x = self.config["variable_x"] if "variable_x" in self.config.keys() else "NONE"
         self.variable_y = self.config["variable_y"] if "variable_y" in self.config.keys() else "NONE"
-        self.selection = self._base_selection
-        self.selection += " WHERE " + self.config["selection"] if "selection" in self.config.keys() else str()
-        self.group_by = self.config["group_by"] if "group_by" in self.config.keys() else dict()
-        try:
-            self.df = pd.read_sql(self.selection, self.db._cnx)
-        except:
-            logging.error ("[ERROR] Query `%s` not valid: fallback to inclusive selection" % self.selection)
-            self.selection = self._base_selection
-            self.df = pd.read_sql(self.selection, self.db._cnx)
+        # self.selection = self._base_selection
+        # self.selection += " WHERE " + self.config["selection"] if "selection" in self.config.keys() else str()
+        # self.group_by = self.config["group_by"] if "group_by" in self.config.keys() else dict()
+        # try:
+        #     self.df = pd.read_sql(self.selection, self.db._cnx)
+        # except:
+        #     logging.error ("[ERROR] Query `%s` not valid: fallback to inclusive selection" % self.selection)
+        #     self.selection = self._base_selection
+        #     self.df = pd.read_sql(self.selection, self.db._cnx)
 
 
     def write (self, label):

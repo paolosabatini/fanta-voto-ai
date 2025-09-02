@@ -41,7 +41,7 @@ class StatsAggregator:
                 self.df["Away_"+stat]
             )
             self.df[stat_against] = np.where(
-                self.df["Team"] == "H",
+                self.df["Team"] == "A",
                 self.df["Home_"+stat],
                 self.df["Away_"+stat]
             )

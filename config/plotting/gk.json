@@ -3,6 +3,7 @@
     [
 	{
 	    "name" : "GK_Marks_by_result",
+	    "xtitle" : "Mark [GK]",
 	    "variable" : "Mark",
 	    "selection" : "(Mark>0) and (FantaPosition == 'P')",
 	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
@@ -15,6 +16,7 @@
 	{
 	    "name" : "GK_Marks_vs_PSXGminusGA",
 	    "variable" : "Mark",
+	    "xtitle" : "Mark [GK]",
 	    "selection" : "(Mark>0) and (FantaPosition == 'P')",
 	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
 	    "group_by" : {
@@ -24,8 +26,34 @@
 	    }
 	},
 	{
+	    "name" : "GK_Marks_vs_PSXGminusGA_NoBonusNoMalus",
+	    "variable" : "Mark",
+	    "xtitle" : "Mark [GK], No bonus/malus",
+	    "selection" : "(Mark>0) and (FantaPosition == 'P') and (GK_GA+Own_goals+Yellow_card+Red_card)==0 and (Assists+GK_pen_saved)==0",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
+	    "group_by" : {
+		"Overperformed" : " (GK_PSXG-GK_GA)>0.5",
+		"Exp. performed" : "(GK_PSXG-GK_GA)<0.5 and (GK_PSXG-GK_GA)>-0.5",
+		"Underperformed" : "(GK_PSXG-GK_GA)<-0.5"
+	    }
+	},
+	{
+	    "name" : "GK_Marks_vs_PSXGminusGA_MixedBonusMalus",
+	    "variable" : "Mark",
+	    "xtitle" : "Mark [GK], Mixed bonus/malus",
+	    "selection" : "(Mark>0) and (FantaPosition == 'P') and (GK_GA+Own_goals+Yellow_card+Red_card)!=0 and (Assists+GK_pen_saved)!=0",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
+	    "group_by" : {
+		"all" : "Mark>0",
+		"Overperformed" : " (GK_PSXG-GK_GA)>0.5",
+		"Exp. performed" : "(GK_PSXG-GK_GA)<0.5 and (GK_PSXG-GK_GA)>-0.5",
+		"Underperformed" : "(GK_PSXG-GK_GA)<-0.5"
+	    }
+	},
+	{
 	    "name" : "GK_Marks_vs_bonuses",
 	    "variable" : "Mark",
+	    "xtitle" : "Mark [GK]",
 	    "selection" : "(Mark>0) and (FantaPosition == 'P')",
 	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
 	    "group_by" : {
@@ -36,14 +64,39 @@
 	    }
 	},
 	{
-	    "name" : "GK_PenSaved_vs_Mark",
-	    "variable" : "GK_pen_saved",
-	    "selection" : "(FantaPosition == 'P')",
-	    "bins" : [-0.5,0.5,1.5,2.5,3.5],
+	    "name" : "GK_Marks_vs_GA",
+	    "variable" : "Mark",
+	    "xtitle" : "Mark [GK]",
+	    "selection" : "(Mark>0) and (FantaPosition == 'P')",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
 	    "group_by" : {
-		"Mark<6" : "Mark<6",
-		"Mark=6" : "Mark==6",
-		"Mark>6" : "Mark>6"
+		"GA = 0" : "GK_GA == 0",
+		"GA = 1" : "GK_GA == 1",
+		"GA = 2" : "GK_GA == 2",
+		"GA > 2" : "GK_GA > 2"
+	    }
+	},
+	{
+	    "name" : "GK_Marks_vs_Maluses",
+	    "variable" : "Mark",
+	    "xtitle" : "Mark [GK]",
+	    "selection" : "(Mark>0) and (FantaPosition == 'P')",
+	    "bins" : [2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
+	    "group_by" : {
+		"Yellow card" : "Yellow_card!=0",
+		"Red card" : "Red_card!=0",
+		"Own_goals" : "Own_goals!=0"
+	    }
+	},
+	{
+	    "name" : "GK_Mark_vs_PenSaved",
+	    "variable" : "Mark",
+	    "xtitle" : "Mark [GK]",
+	    "selection" : "(Mark>0) and (FantaPosition == 'P')",
+	    "bins" :[2.75,3.25,3.75,4.25,4.75,5.25,5.75,6.25,6.75,7.25,7.75,8.25,8.75,9.35,9.75],
+	    "group_by" : {
+		"No pen. saved" : "GK_pen_saved==0",
+		"Pen. saved" : "GK_pen_saved>0"
 	    }
 	}
     ]

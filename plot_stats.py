@@ -18,12 +18,15 @@ def main():
     arguments = get_option_parser()
     json_configuration = arguments.config
     output_label = arguments.label
+    input_filename = arguments.input
     logging.info("Json configuration:\t%s" % json_configuration)
+    logging.info("Input Parquet data:\t%s" % input_filename)
+    logging.info("Output label:\t%s" % output_label)
 
     if not os.path.isfile (json_configuration):
         logging.error ("[ERROR] Json configuration file is not found")
         exit()
-    pm = PlotManager (json_configuration, output_label)
+    pm = PlotManager (json_configuration, output_label, input_filename)
     pm.plot()
 
     
@@ -33,6 +36,8 @@ Argument parser
 def get_option_parser():
     from argparse import ArgumentParser
     parser = ArgumentParser()
+    parser.add_argument("-i", "--input", dest="input",type=str,
+                        help="Path to parquet data",required=True)
     parser.add_argument("-c", "--config", dest="config",type=str,
                         help="Path to configuration JSON file",required=True)
     parser.add_argument("-l", "--label", dest="label",type=str,
