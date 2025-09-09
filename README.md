@@ -77,7 +77,8 @@ $ pip install plotly
 $ pip install scipy
 $ pip install seaborn
 $ pip install -U kaleido 
-pip install pyarrow
+$ pip install pyarrow
+$ pip install scikit-learn
 ```
 
 

@@ -42,7 +42,7 @@ def get_option_parser():
     parser = ArgumentParser()
     parser.add_argument("-c", "--config", dest="config",type=str,
                         help="Name of preprocessing configuration",required=True,
-                        choices=["Raw"])
+                        choices=["Raw", "GkBasic"])
     parser.add_argument("-l", "--label", dest="label",type=str,
                         help="Label to save the output with",default="v1")
     return parser.parse_args()
