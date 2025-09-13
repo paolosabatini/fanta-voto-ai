@@ -40,12 +40,12 @@ class PreprocessGkBasic:
     def get_df_zscaled (self):
         df_zscaled_features = self.df [self._features_zscaling]
         zscaled_array = self.zscaler.fit_transform(df_zscaled_features)
-        return pd.DataFrame(zscaled_array, columns=df_zscaled_features.columns)
+        return pd.DataFrame(zscaled_array, index=self.df.index, columns=df_zscaled_features.columns)
 
     def get_df_minmax(self):
         df_minmax_features = self.df [self._features_minmax]
         minmax_array = self.minmaxscaler.fit_transform(df_minmax_features)
-        return pd.DataFrame(minmax_array, columns=df_minmax_features.columns)
+        return pd.DataFrame(minmax_array, index=self.df.index, columns=df_minmax_features.columns)
 
     
     def execute (self):
@@ -60,9 +60,10 @@ class PreprocessGkBasic:
         self.df["Goal_diff"] = self.df["goal"].sub( self.df ["goal_against"] )
         
         # Selecting interesting feaetures
+        # Note, we do not want to touch the original df to use the same index
         df_zscaled = self.get_df_zscaled()
         df_minmaxscaled = self.get_df_minmax()
-        self.df = pd.concat ( [df_zscaled, df_minmaxscaled], axis=1)
+        df_mark = self.df["Mark"]
 
-
-        
+        self.df = pd.concat ( [df_zscaled, df_minmaxscaled, df_mark], axis=1)
+        self.df = self.df.dropna()
